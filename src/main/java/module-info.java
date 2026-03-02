@@ -5,7 +5,8 @@ module com.cobra{
 
     opens com.cobra to javafx.fxml;
     opens com.cobra.controllers to javafx.fxml;
-    opens com.cobra.models to javafx.base;
 
     exports com.cobra;
+    exports com.cobra.models;
+    opens com.cobra.models to javafx.base, javafx.fxml;
 }
