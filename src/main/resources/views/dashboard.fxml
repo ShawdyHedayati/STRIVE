@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.Label?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.cobra.controllers.DashboardController">
+
+    <top>
+        <Label text="Budget Tracker" style="-fx-font-size: 24px; -fx-padding: 20;" />
+    </top>
+
+    <center>
+        <Label text="Transactions will go here" />
+    </center>
+</BorderPane>
