@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="566c74a2-8e8e-4afa-b4d5-4a73b966defe" name="Changes" comment="added tables for goals and transactions">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/cobra/controllers/DashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cobra/controllers/DashboardController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/views/dashboard.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/views/dashboard.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,16 +29,16 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="SET_USER_NAME_GLOBALLY" value="false" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "heday005"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;heday005&quot;
   }
-}]]></component>
+}</component>
   <component name="GithubPullRequestsUISettings"><![CDATA[{
   "selectedUrlAndAccountId": {
-    "url": "https://github.com/heday005/CoBRA.git",
-    "accountId": "634552a6-10d6-4c4a-95ee-4b85ef022af9"
+    "url": "https://github.com/Ziggatharia/CoBRA.git",
+    "accountId": "1db5edc3-110e-4859-8426-b9dec0187f40"
   }
 }]]></component>
   <component name="ProblemsViewState">
@@ -55,6 +54,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.CoBRA.executor": "Run",
     "Application.Main.executor": "Run",
     "Application.MainApp.executor": "Run",
     "Maven.Cobra-frontend-test [org.openjfx:javafx-maven-plugin:0.0.8:run].executor": "Run",
@@ -64,15 +64,37 @@
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "shawd-front",
+    "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/shawd/Desktop/School/SPRING 2026/CS 370/CoBRA",
+    "last_opened_file_path": "C:/Users/shawd/Desktop/000_spring-2026/CS370/CoBRA",
     "onboarding.tips.debug.path": "C:/Users/shawd/Desktop/000_spring-2026/CS370/Cobra-frontend-test/src/main/java/org/example/Main.java",
-    "project.structure.last.edited": "Project",
+    "project.structure.last.edited": "Libraries",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.0",
     "settings.editor.selected.configurable": "preferences.pluginManager"
   }
 }]]></component>
+  <component name="RunManager">
+    <configuration name="CoBRA" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="com.cobra.MainApp" />
+      <module name="Cobra" />
+      <option name="VM_PARAMETERS" value="--module-path &quot;C:\Users\shawd\Desktop\javafx-sdk-25.0.2\lib&quot; --add-modules javafx.controls,javafx.fxml,com.cobra" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="CoBRA" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="CoBRA" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
