@@ -1,3 +1,5 @@
+package com.cobra.models;
+
 import java.util.ArrayList;
 
 public class TransactionTable {
