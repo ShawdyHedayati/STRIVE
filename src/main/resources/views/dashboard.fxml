@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.Button?>
 
 <!-- linked to dash controller (fx:controller) -->
 <BorderPane xmlns:fx="http://javafx.com/fxml"
@@ -19,6 +20,8 @@
     <center>
         <!-- main content area, vertical stacking widgets -->
         <VBox spacing = "20" style="-fx-padding: 20;">
+            <Button text="+ Add" onAction="#onAddTransaction" style="-fx-background-color: #e94560; -fx-text-fill: white; -fx-font-weight: bold;"/>
+            <Button text="Edit" onAction="#onEditTransaction" style="-fx-background-color: #f5a623; -fx-text-fill: white; -fx-font-weight: bold;"/>
             <!--
             Transactions Table
             fx:id must match @FXML field names in dash controller

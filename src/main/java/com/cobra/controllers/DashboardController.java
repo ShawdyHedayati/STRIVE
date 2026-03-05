@@ -1,5 +1,6 @@
 package com.cobra.controllers;
 
+import com.cobra.cache.CacheManager;
 import com.cobra.models.Goal;
 import com.cobra.models.Transaction;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -8,13 +9,25 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextInputDialog;
 
-// For right now this is for taking table data and displaying it
-// this will change because that isnt what we want for the dash
-// but this will give better idea of general functionality
-// Ian will build the database so the placeholder data is temporary as of right now
+/*
+for main dashboard
+data read/write fo through cache manager
+
+to add new feature:
+add cache op to cache manage
+add @FXML method that calls
+call refreshUI at end for table update
+
+TODO:
+- delete
+- add/edit/delete goal
+- charts
+*/
 
 public class DashboardController {
 
@@ -30,14 +43,12 @@ public class DashboardController {
     @FXML private TableColumn<Goal, Double> GoalAmountCol;
     @FXML private TableColumn<Goal, String> GoalDateCol;
 
-    // intit() auto called by fjx when loaded
-    // loads data into the tables
+    // reference to cache that i have made with my fingies
+    private final CacheManager cache = CacheManager.getInstance();
 
     @FXML
-
     public void initialize() {
         // transaction cols
-        // which field from transaction will be displayed
         TransactionIDCol.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().id()).asObject());
         TransactionCategoryCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().category()));
         TransactionAmountCol.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().amount()).asObject());
@@ -61,24 +72,94 @@ public class DashboardController {
             return new SimpleStringProperty(formatted);
         });
 
-        // DATABASE IS NOT SET UP
-        // THIS WILL BE THE PLACEHOLDER FOR NOW I JUST NEED DATA TO SEE IF THIS WORKS
-        ObservableList<Transaction> transactions = FXCollections.observableArrayList(
-                new Transaction(1, 24.99, "Food", 20260301),
-                new Transaction(2, 9.99, "Fun", 20260301),
-                new Transaction(3, 50.00, "Utilities", 20260228)
-        );
-
-        TransactionTable.setItems(transactions);
-
-        ObservableList<Goal> goals = FXCollections.observableArrayList(
-                new Goal(1, 150.00, "Living", 20260401),
-                new Goal(2, 100.00, "Food", 20260401),
-                new Goal(3, 50.00, "Fun", 20260401)
-        );
-
-        GoalTable.setItems(goals);
+        refreshUI();
 
         System.out.println("Dashboard Loaded!!!!!!!!!!!");
+    }
+
+    @FXML
+    private void onAddTransaction() {
+
+        // we need info to enter
+        String category = askInput("Add Transaction", "Category (e.g. Food):");
+        String amountStr = askInput("Add Transaction", "Amount (e.g. 24.99):");
+        String dateStr = askInput("Add Transaction", "Date (YYYYMMDD e.g. 20260301):");
+
+        // for cancelling, do nothing if canceled
+        if (category == null || amountStr == null || dateStr == null)
+            return;
+
+        try {
+            // convert into usable variables
+            double amount = Double.parseDouble(amountStr);
+            int date = Integer.parseInt(dateStr);
+
+            // add to cache and update table
+            cache.addTransaction(category, amount, date);
+            refreshUI();
+        } catch (NumberFormatException e) {
+            // incorrect input entered
+            showAlert("Invalid input", "Amount must be a number, date must be YYYYMMDD.");
+        }
+    }
+
+    @FXML
+    private void onEditTransaction() {
+
+        // user need to click on a row to edit
+        Transaction selected = TransactionTable.getSelectionModel().getSelectedItem();
+
+        // cancel thing again
+        if (selected == null) {
+            showAlert("No selection", "Please select a transaction to edit.");
+
+            return;
+        }
+
+        // get our inputs, yet again
+        String category = askInput("Edit Transaction", "Category:");
+        String amountStr = askInput("Edit Transaction", "Amount:");
+        String dateStr = askInput("Edit Transaction", "Date (YYYYMMDD):");
+
+        // CANCELING AKJHDSLKAJHLGIUWYHDI
+        if (category == null || amountStr == null || dateStr == null)
+            return;
+
+        try {
+            // convert yet again
+            double amount = Double.parseDouble(amountStr);
+            int date = Integer.parseInt(dateStr);
+
+            // cache update yippee
+            cache.updateTransaction(selected.id(), category, amount, date);
+            refreshUI();
+        } catch (NumberFormatException e) {
+            // invalid again
+            showAlert("Invalid input", "Amount must be a number, date must be YYYYMMDD.");
+        }
+    }
+
+    private void refreshUI() {
+        TransactionTable.setItems(FXCollections.observableArrayList(cache.getTransactions()));
+        GoalTable.setItems(FXCollections.observableArrayList(cache.getGoals()));
+    }
+
+    private String askInput(String title, String prompt) {
+        TextInputDialog dialog = new TextInputDialog();
+
+        dialog.setTitle(title);
+        dialog.setHeaderText(null);
+        dialog.setContentText(prompt);
+
+        return dialog.showAndWait().orElse(null);
+    }
+
+    private void showAlert(String title, String message){
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
