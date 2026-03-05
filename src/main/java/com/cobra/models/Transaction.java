@@ -1,3 +1,5 @@
+package com.cobra.models;
+
 // public class Transaction {
 // 	private int id;
 // 	private double amount;
@@ -37,6 +39,6 @@
 // 	}
 // }
 
-public record Transaction(int id, double amount, String category, int date) {
+public record Transaction(int id, double amount, String category, String date) {
 	// TODO: Add input validation
 }
