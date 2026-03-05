@@ -27,17 +27,9 @@ public class DBLayer {
 		topDir = new File(System.getProperty("user.dir"));
 		dbFile = new File(topDir, "/src/main/resources");
 		dburl = "jdbc:sqlite:" + dbFile.getAbsolutePath();
-	}
-
-	// Locate .db file and save its filepath
-	public void getURL() {
-		var currentDir = new File(System.getProperty("user.dir"));
 		// TODO: Ideally this isn't a hardcoded filepath
 		// Should probably search through top of directory for .db file with correct
 		// name and use its location
-		var dbFile = new File(currentDir.getParent(), "/CoBRA/src/main/resources/strive_test.db");
-		dburl = "jdbc:sqlite:" + dbFile.getAbsolutePath();
-		System.out.println(dburl);
 	}
 
 	// Function to gather rows from SQL database file using RowMapper interface
