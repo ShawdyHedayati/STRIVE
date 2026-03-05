@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="566c74a2-8e8e-4afa-b4d5-4a73b966defe" name="Changes" comment="added tables for goals and transactions">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/cobra/cache/CacheManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/cobra/controllers/DashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cobra/controllers/DashboardController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/views/dashboard.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/views/dashboard.fxml" afterDir="false" />
-    </list>
+    <list default="true" id="566c74a2-8e8e-4afa-b4d5-4a73b966defe" name="Changes" comment="added tables for goals and transactions" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
