@@ -21,7 +21,7 @@ public class MainApp extends Application {
 
 	public static void main(String[] args) {
 		DBLayer dblayer = new DBLayer();
-		dblayer.getURL();
+		dblayer.initDB();
 		ArrayList<Transaction> transactionList = dblayer.fetchTransactions();
 		ArrayList<Goal> goalList = dblayer.fetchGoals();
 		System.out.println("Transaction List " + transactionList);

@@ -25,7 +25,7 @@ public class DBLayer {
 	// TODO: Needs checks and error handling
 	public void initDB() {
 		topDir = new File(System.getProperty("user.dir"));
-		dbFile = new File(topDir, "/src/main/resources");
+		dbFile = new File(topDir, "/src/main/resources/strive_test.db");
 		dburl = "jdbc:sqlite:" + dbFile.getAbsolutePath();
 		// TODO: Ideally this isn't a hardcoded filepath
 		// Should probably search through top of directory for .db file with correct
