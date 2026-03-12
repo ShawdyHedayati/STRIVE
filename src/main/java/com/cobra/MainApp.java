@@ -19,6 +19,8 @@ public class MainApp extends Application {
 		stage.show();
 	}
 
+	System.out.println("This is Alex's change!");
+
 	public static void main(String[] args) {
 		DBModel dbmodel = new DBModel();
 		dbmodel.initDB();
