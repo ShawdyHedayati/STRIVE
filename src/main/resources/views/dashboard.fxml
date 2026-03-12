@@ -10,7 +10,7 @@
 
 <!-- linked to dash controller (fx:controller) -->
 <BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.cobra.controllers.DashboardController">
+            fx:controller="com.cobra.Controller">
 
     <!-- top nav bar placeholder -->
     <top>
