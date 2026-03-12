@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="566c74a2-8e8e-4afa-b4d5-4a73b966defe" name="Changes" comment="" />
+    <list default="true" id="566c74a2-8e8e-4afa-b4d5-4a73b966defe" name="Changes" comment="added tables for goals and transactions" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -17,9 +17,36 @@
       </list>
     </option>
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 7
-}]]></component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="SET_USER_NAME_GLOBALLY" value="false" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;heday005&quot;
+  }
+}</component>
+  <component name="GithubDefaultAccount">
+    <option name="defaultAccountId" value="3544cce6-b59f-4853-a7ba-9e8a3a4912a0" />
+  </component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Ziggatharia/CoBRA.git&quot;,
+    &quot;accountId&quot;: &quot;634552a6-10d6-4c4a-95ee-4b85ef022af9&quot;
+  }
+}</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="3AMxzJ7hc7Zv2NOJVEEeVLgwejP" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -27,17 +54,83 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.CoBRA.executor": "Run",
     "Application.Main.executor": "Run",
     "Application.MainApp.executor": "Run",
+    "Maven.Cobra [javafx:run].executor": "Run",
+    "Maven.Cobra [org.openjfx:javafx-maven-plugin:0.0.8:run].executor": "Run",
     "Maven.Cobra-frontend-test [org.openjfx:javafx-maven-plugin:0.0.8:run].executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "shawd-datafetch",
+    "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/shawd/Desktop/000_spring-2026/CS370/CoBRA",
     "onboarding.tips.debug.path": "C:/Users/shawd/Desktop/000_spring-2026/CS370/Cobra-frontend-test/src/main/java/org/example/Main.java",
-    "settings.editor.selected.configurable": "preferences.keymap"
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
 }]]></component>
+  <component name="RunManager" selected="Maven.Cobra [javafx:run]">
+    <configuration name="CoBRA" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="com.cobra.MainApp" />
+      <module name="Cobra" />
+      <option name="VM_PARAMETERS" value="--module-path &quot;C:\Users\shawd\Desktop\javafx-sdk-25.0.2\lib&quot; --add-modules javafx.controls,javafx.fxml,com.cobra" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="CoBRA" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="CoBRA" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Cobra [javafx:run]" type="MavenRunConfiguration" factoryName="Maven" nameIsGenerated="true">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="cmdOptions" />
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list>
+                <option value="javafx:run" />
+              </list>
+            </option>
+            <option name="multimoduleDir" />
+            <option name="pomFileName" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="projectsCmdOptionValues">
+              <list />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Application.CoBRA" />
+      <item itemvalue="Maven.Cobra [javafx:run]" />
+    </list>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -53,7 +146,31 @@
       <option name="presentableId" value="Default" />
       <updated>1772416504055</updated>
     </task>
+    <task id="LOCAL-00001" summary="added tables for goals and transactions">
+      <option name="closed" value="true" />
+      <created>1772434197869</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1772434197869</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="added tables for goals and transactions" />
+    <option name="LAST_COMMIT_MESSAGE" value="added tables for goals and transactions" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -65,5 +182,9 @@
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
