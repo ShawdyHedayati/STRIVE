@@ -1,6 +1,6 @@
 package com.cobra;
 
-import com.cobra.models.*;
+import com.cobra.types.*;
 
 import java.util.ArrayList;
 import javafx.application.Application;
@@ -20,10 +20,10 @@ public class MainApp extends Application {
 	}
 
 	public static void main(String[] args) {
-		DBLayer dblayer = new DBLayer();
-		dblayer.initDB();
-		ArrayList<Transaction> transactionList = dblayer.fetchTransactions();
-		ArrayList<Goal> goalList = dblayer.fetchGoals();
+		DBModel dbmodel = new DBModel();
+		dbmodel.initDB();
+		ArrayList<Transaction> transactionList = dbmodel.fetchTransactions();
+		ArrayList<Goal> goalList = dbmodel.fetchGoals();
 		System.out.println("Transaction List " + transactionList);
 		System.out.println("Goal List " + goalList);
 		launch();

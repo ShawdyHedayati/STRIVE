@@ -3,7 +3,7 @@
 <?import javafx.scene.control.Label?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.cobra.controllers.DashboardController">
+            fx:controller="com.cobra.Controller">
 
     <top>
         <Label text="Budget Tracker" style="-fx-font-size: 24px; -fx-padding: 20;" />

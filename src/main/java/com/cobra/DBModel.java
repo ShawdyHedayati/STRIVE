@@ -1,6 +1,6 @@
 package com.cobra;
 
-import com.cobra.models.*;
+import com.cobra.types.*;
 
 import java.util.ArrayList;
 import java.sql.Connection;
@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.io.File;
 
-public class DBLayer {
+public class DBModel {
 	String dburl = null;
 	File topDir = null;
 	File dbFile = null;
