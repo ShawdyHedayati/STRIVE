@@ -4,9 +4,10 @@ module com.cobra{
     requires java.sql;
 
     opens com.cobra to javafx.fxml;
-    opens com.cobra.controllers to javafx.fxml;
+    opens com.cobra.cache to javafx.fxml;
+    opens com.cobra.types to javafx.base, javafx.fxml;
 
     exports com.cobra;
-    exports com.cobra.models;
-    opens com.cobra.models to javafx.base, javafx.fxml;
+    exports com.cobra.types;
+    exports com.cobra.cache;
 }

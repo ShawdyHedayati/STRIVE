@@ -54,7 +54,7 @@ public class DBModel {
 				rs.getInt("id"),
 				rs.getDouble("amount"),
 				rs.getString("category"),
-				rs.getString("date")));
+				rs.getInt("date")));
 	}
 
 	// Goal typed fetchRows using Lambda
@@ -64,6 +64,6 @@ public class DBModel {
 				rs.getInt("id"),
 				rs.getDouble("amount"),
 				rs.getString("category"),
-				rs.getString("date")));
+				rs.getInt("date")));
 	}
 }

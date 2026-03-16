@@ -1,7 +1,7 @@
 package com.cobra.cache;
 
-import com.cobra.models.Goal;
-import com.cobra.models.Transaction;
+import com.cobra.types.Goal;
+import com.cobra.types.Transaction;
 import java.util.*;
 
 /*
