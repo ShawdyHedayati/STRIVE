@@ -13,6 +13,11 @@ public class Controller {
 		this.dbModel = new DBModel();
 		this.dbModel.initDB(); // before fetch
 		this.cache = CacheManager.getInstance();
+		updateCache();
+
+		System.out.println("Cache Loaded:");
+		System.out.println("\tTransactions: " + cache.getTransactionList());
+		System.out.println("\tGoals: " + cache.getGoalList());
 	}
 
 	public void updateCache() {

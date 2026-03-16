@@ -11,7 +11,7 @@ public class CacheManager {
     private ArrayList<Transaction> transactionList;
     private ArrayList<Goal> goalList;
 
-    private CacheManager {}
+    private CacheManager() {}
 
     public static CacheManager getInstance() {
         if (instance == null) {
