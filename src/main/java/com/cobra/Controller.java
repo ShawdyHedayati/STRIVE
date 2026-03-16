@@ -23,6 +23,9 @@ public class Controller {
 	public void updateCache() {
 		cache.setTransactionList(dbModel.fetchTransactions());
 		cache.setGoalList(dbModel.fetchGoals());
+
+		// TODO: updateView()
+		// notify the view layer once view is implemented
 	}
 
 	public ArrayList<Transaction> getTransactions() {
@@ -32,4 +35,7 @@ public class Controller {
 	public ArrayList<Goal> getGoals() {
 		return cache.getGoalList();
 	}
+
+	// TODO: getData()
+	// pull data from model layer
 }
