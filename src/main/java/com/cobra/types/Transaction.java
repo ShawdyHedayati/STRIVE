@@ -1,5 +1,13 @@
 package com.cobra.types;
 
-public record Transaction(int id, double amount, String category, String date) {
-	// TODO: Add input validation
+import com.cobra.types.Statement;
+
+public record Transaction(int id, double amount, String category, String date) implements DBRecord {
+	public Transaction(Statement s) {
+		this(s.getID(), s.getAmount(), s.getCategory(), s.getDate());
+	}
+
+	public int getID() {
+		return this.id;
+	}
 }
