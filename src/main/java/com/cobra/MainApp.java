@@ -20,12 +20,13 @@ public class MainApp extends Application {
 	}
 
 	public static void main(String[] args) {
-		DBModel dbmodel = new DBModel();
+		DBModel dbmodel = DBModel.getInstance();
+		// DBModel dbmodel = new DBModel();
 		dbmodel.initDB();
 		ArrayList<Transaction> transactionList = dbmodel.fetchTransactions();
-		ArrayList<Goal> goalList = dbmodel.fetchGoals();
+		ArrayList<Limit> limitList = dbmodel.fetchLimits();
 		System.out.println("Transaction List " + transactionList);
-		System.out.println("Goal List " + goalList);
+		System.out.println("Limit List " + limitList);
 		launch();
 	}
 }
