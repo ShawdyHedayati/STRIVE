@@ -15,6 +15,21 @@ public class DBModel {
 	File topDir = null;
 	File dbFile = null;
 
+	private static DBModel instance;
+
+	private DBModel() {
+	}
+
+	// Create Model if no Model exists, otherwise do nothing
+	public static DBModel getInstance() {
+		if (instance == null)
+			instance = new DBModel();
+		else
+			System.out.println("Model already exists...");
+		initDB();
+		return instance;
+	}
+
 	// Generic mapping function to ingest SQL rows as ResultSet object
 	@FunctionalInterface
 	public interface RowMapper<T> {
@@ -22,14 +37,12 @@ public class DBModel {
 	}
 
 	// Initializes database file and file paths
-	// TODO: Needs checks and error handling
+	// TODO: This should create file if not exists otherwise find it at correct
+	// location -> "src/main/resources/DB_FILENAME.db"
 	public void initDB() {
 		topDir = new File(System.getProperty("user.dir"));
 		dbFile = new File(topDir, "/src/main/resources/strive_test.db");
 		dburl = "jdbc:sqlite:" + dbFile.getAbsolutePath();
-		// TODO: Ideally this isn't a hardcoded filepath
-		// Should probably search through top of directory for .db file with correct
-		// name and use its location
 	}
 
 	// Function to gather rows from SQL database file using RowMapper interface
@@ -57,13 +70,29 @@ public class DBModel {
 				rs.getInt("date")));
 	}
 
-	// Goal typed fetchRows using Lambda
-	public ArrayList<Goal> fetchGoals() {
+	// Limit typed fetchRows using Lambda
+	public ArrayList<Limit> fetchLimits() {
 		String query = "SELECT * FROM goals";
-		return fetchRows(query, rs -> new Goal(
+		return fetchRows(query, rs -> new Limit(
 				rs.getInt("id"),
 				rs.getDouble("amount"),
 				rs.getString("category"),
 				rs.getInt("date")));
+	}
+
+	// public void injestActions(ArrayList<Action> actions) {
+	// TODO: Take list of actions and convert them into SQL queries
+	// }
+
+	public void createQuery(String query) {
+		// TODO: SQL add query
+	}
+
+	public void updateQuery(String query) {
+		// TODO: SQL update query
+	}
+
+	public void destroyQuery(String query) {
+		// TODO: SQL destroy query
 	}
 }
