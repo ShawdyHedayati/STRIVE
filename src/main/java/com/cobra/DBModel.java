@@ -22,11 +22,13 @@ public class DBModel {
 
 	// Create Model if no Model exists, otherwise do nothing
 	public static DBModel getInstance() {
-		if (instance == null)
+		if (instance == null) {
 			instance = new DBModel();
-		else
-			System.out.println("Model already exists...");
-		initDB();
+			instance.initDB();
+		}
+//		else
+//			System.out.println("Model already exists...");
+//		initDB();
 		return instance;
 	}
 

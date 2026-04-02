@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.cobra.DashboardView"
+      spacing="16"
+      style="-fx-padding: 24;">
+
+    <Label text="STRIVE — Budget Tracker" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+    <!-- Transaction list -->
+    <Label text="Transactions"/>
+    <ListView fx:id="transactionListView" prefHeight="300"/>
+
+    <!-- Add transaction button -->
+    <Button text="Add Transaction" onAction="#onAddTransactionClicked"/>
+
+</VBox>
