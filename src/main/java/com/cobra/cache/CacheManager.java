@@ -1,6 +1,6 @@
 package com.cobra.cache;
 
-import com.cobra.types.Goal;
+//import com.cobra.types.Goal;
 import com.cobra.types.Transaction;
 import java.util.ArrayList;
 
@@ -11,7 +11,7 @@ public class CacheManager {
     private static CacheManager instance; // the class NOT obj
 
     private ArrayList<Transaction> transactionList;
-    private ArrayList<Goal> goalList;
+    // private ArrayList<Goal> goalList;
 
     private CacheManager() {}
 
@@ -25,14 +25,14 @@ public class CacheManager {
     public ArrayList<Transaction> getTransactionList() {
         return transactionList;
     }
-    public ArrayList<Goal> getGoalList() {
-        return goalList;
+    // public ArrayList<Goal> getGoalList() {
+        //return goalList;
     }
 
-    public void setTransactionList(ArrayList<Transaction> list) {
-        this.transactionList = list;
-    }
-    public void setGoalList(ArrayList<Goal> list) {
-        this.goalList = list;
-    }
-}
+    //public void setTransactionList(ArrayList<Transaction> list) {
+        //this.transactionList = list;
+    //}
+    //public void setGoalList(ArrayList<Goal> list) {
+        //this.goalList = list;
+    //}
+//}
