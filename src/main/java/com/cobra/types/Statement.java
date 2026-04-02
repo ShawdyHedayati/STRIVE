@@ -1,23 +1,24 @@
 package com.cobra.types;
 
-enum QueryT {
-	INSERT,
-	DELETE,
-	UPDATE
-}
-
-enum TableT {
-	TRANSACTIONS,
-	LIMITS
-}
-
 public class Statement {
+
+	public enum QueryT {
+		INSERT_Q,
+		DELETE_Q,
+		UPDATE_Q
+	}
+
+	public enum TableT {
+		TRANSACTIONS_TB,
+		LIMITS_TB
+	}
+
 	private final QueryT QueryType;
 	private final TableT TableType;
 	private int id;
 	private double amount;
 	private String category;
-	private int date;
+	private String date;
 
 	private Statement(Builder builder) {
 		this.QueryType = builder.QueryType;
@@ -34,7 +35,7 @@ public class Statement {
 		private int id = -1;
 		private double amount = -1;
 		private String category = "";
-		private int date = -1;
+		private String date = "";
 
 		public Builder(QueryT qt, TableT tt) {
 			this.QueryType = qt;
@@ -56,7 +57,7 @@ public class Statement {
 			return this;
 		}
 
-		public Builder date(int val) {
+		public Builder date(String val) {
 			date = val;
 			return this;
 		}
@@ -64,5 +65,29 @@ public class Statement {
 		public Statement build() {
 			return new Statement(this);
 		}
+	}
+
+	public QueryT getQueryType() {
+		return QueryType;
+	}
+
+	public TableT getTableType() {
+		return TableType;
+	}
+
+	public int getID() {
+		return id;
+	}
+
+	public double getAmount() {
+		return amount;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public String getDate() {
+		return date;
 	}
 }
