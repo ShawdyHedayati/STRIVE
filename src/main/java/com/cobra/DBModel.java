@@ -127,7 +127,17 @@ public class DBModel {
 				rs.getString("date")));
 	}
 
-	public void injestActions(Statement s) {
+	private final ArrayList<CacheListener> listeners = new ArrayList<>();
+
+	public void addCacheListener(CacheListener l) {
+		listeners.add(l);
+	}
+
+	private void notifyListeners() {
+		for (CacheListener l : listeners) l.onCacheUpdated();
+	}
+
+	public void ingestActions(Statement s) {
 		cache.processStatement(s);
 
 		switch (s.getQueryType()) {
@@ -135,21 +145,38 @@ public class DBModel {
 			case DELETE_Q -> persistDelete(s);
 			case UPDATE_Q -> persistUpdate(s);
 		}
+		notifyListeners();
+	}
+
+	public ArrayList<Transaction> getTransactions() {
+		return cache.getTransactions();
+	}
+
+	public ArrayList<Limit> getLimits() {
+		return cache.getLimits();
+	}
+
+	public int getNextID() {
+		ArrayList<Transaction> t = cache.getTransactions();
+		ArrayList<Limit> l = cache.getLimits();
+		int maxT = t.isEmpty() ? 0 : t.stream().mapToInt(Transaction::id).max().getAsInt();
+		int maxL = l.isEmpty() ? 0 : l.stream().mapToInt(Limit::id).max().getAsInt();
+		return Math.max(maxT, maxL) + 1;
 	}
 
 	private void persistInsert(Statement s) {
 		String sql = switch (s.getTableType()) {
 			case TRANSACTIONS_TB ->
-					String.format("INSERT INTO transactions (id, amount, category, date) Values (%d, %f, '%s', '%s'", s.getID(), s.getAmount(), s.getCategory(), s.getDate());
+					String.format("INSERT INTO transactions (id, amount, category, date) VALUES (%d, %f, '%s', '%s')", s.getID(), s.getAmount(), s.getCategory(), s.getDate());
 			case LIMITS_TB ->
-					String.format("INSERT INTO goals (is, amount, category, date), VALUES (%d, %f, '%s', '%s'", s.getID(), s.getAmount(), s.getCategory(), s.getDate());
+					String.format("INSERT INTO goals (id, amount, category, date) VALUES (%d, %f, '%s', '%s')", s.getID(), s.getAmount(), s.getCategory(), s.getDate());
 		};
 		executeWrite(sql);
 	}
 
 	private void persistDelete(Statement s) {
 		String table = (s.getTableType() == Statement.TableT.TRANSACTIONS_TB) ? "transactions" : "goals";
-		executeWrite("DELTE FROM " + table + " WHERE id = " + s.getID());
+		executeWrite("DELETE FROM " + table + " WHERE id = " + s.getID());
 	}
 
 	private void persistUpdate(Statement s) {

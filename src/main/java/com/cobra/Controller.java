@@ -1,32 +1,18 @@
 package com.cobra;
 
-import com.cobra.cache.CacheManager;
-import com.cobra.types.Limit;
 import com.cobra.types.Statement;
-import com.cobra.types.Transaction;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 
 public class Controller {
 	private final DBModel dbModel;
-	private final CacheManager cache;
-
-	private DashboardView view;
-
 	private final ArrayDeque<Statement> actionQueue = new ArrayDeque<>();
-
-	private int nextId= 1;
+	private int nextId;
 
 	public Controller() {
 		this.dbModel = DBModel.getInstance();
-		this.cache = CacheManager.getInstance();
-		updateCache();
+		this.nextId = dbModel.getNextID();
 	}
-
-	public void setView(DashboardView view) {this.view = view;}
-
-	// event listener
 
 	public void onInsertTransactionRequested(double amount, String category) {
 		System.out.println("[Controller] INSERT requested: " + amount + " / " + category);
@@ -57,33 +43,9 @@ public class Controller {
 		flushQueue();
 	}
 
-	// queue ->->-> model
-
 	private void flushQueue() {
 		while (!actionQueue.isEmpty()) {
-			Statement stmt = actionQueue.poll();
-			dbModel.ingestStatement(stmt);
-		}
-		cache.setTransactionList(new ArrayList<>(dbModel.fetchTransactions()));
-		cache.setLimitList(new ArrayList<>(dbModel.fetchLimits()));
-		notifyView();
-	}
-
-	public void updateCache() {
-		cache.setTransactionList(dbModel.fetchTransactions());
-		cache.setLimitList(dbModel.fetchLimits());
-		System.out.println("[Controller] Cache updated - " + cache.getTransactionList().size() + " transactions, " + cache.getLimitList().size() + " limits");
-	}
-
-	private void notifyView() {
-		if (view != null) {
-			view.refresh(cache.getTransactionList(), cache.getLimitList());
+			dbModel.ingestActions(actionQueue.poll());
 		}
 	}
-
-	public ArrayList<Transaction> getTransactions() {
-		return cache.getTransactionList();
-	}
-
-	public ArrayList<Limit> getLimits() { return cache.getLimitList();}
 }

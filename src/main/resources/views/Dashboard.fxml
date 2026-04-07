@@ -26,8 +26,8 @@
                    GridPane.rowIndex="0"/>
             <TextField fx:id="testAmountField"
                        promptText="e.g. 42.50"
-                       GridePane.columnIndex="1"
-                       GridePane.rowIndex="0"
+                       GridPane.columnIndex="1"
+                       GridPane.rowIndex="0"
                        prefWidth="180"/>
 
             <Label text="Category:"
@@ -35,8 +35,8 @@
                    GridPane.rowIndex="1"/>
             <TextField fx:id="testCategoryField"
                        promptText="e.g. Food"
-                       GridePane.columnIndex="1"
-                       GridePane.rowIndex="1"
+                       GridPane.columnIndex="1"
+                       GridPane.rowIndex="1"
                        prefWidth="180"/>
 
             <Button text="Submit"

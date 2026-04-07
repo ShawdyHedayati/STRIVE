@@ -16,8 +16,6 @@ public class MainApp extends Application {
 		DashboardView view = fxml.getController();
 
 		Controller controller = new Controller();
-
-		controller.setView(view);
 		view.setController(controller);
 
 		stage.setTitle("STRIVE - Budget Tracker");

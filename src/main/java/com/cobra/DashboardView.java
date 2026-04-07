@@ -22,7 +22,10 @@ public class DashboardView {
 
     public void setController(Controller controller) {
         this.controller = controller;
-        refresh(controller.getTransactions(), controller.getLimits());
+        DBModel dbModel = DBModel.getInstance();
+        dbModel.addCacheListener(() -> refresh(dbModel.getTransactions(), dbModel.getLimits()));
+
+        refresh(dbModel.getTransactions(), dbModel.getLimits());
     }
 
     @FXML
