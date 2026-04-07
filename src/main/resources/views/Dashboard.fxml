@@ -68,6 +68,9 @@
         <Button text="Delete Selected"
                 onAction="#onDeleteSelectedClicked"
                 style="-fx-background-color: #F44336; -fx-text-fill: white;"/>
+        <Button text="Undo Action"
+                onAction="#onUndoClicked"
+                style="-fx-background-color: #00000; -fx-text-fill: white;"/>
     </HBox>
 
 </VBox>

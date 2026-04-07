@@ -79,6 +79,11 @@ public class DashboardView {
         }
     }
 
+    @FXML
+    private void onUndoClicked() {
+        controller.onUndoRequested();
+    }
+
     public void refresh(ArrayList<Transaction> transactions, ArrayList<Limit> limits) {
         transactionListView.getItems().clear();
 
