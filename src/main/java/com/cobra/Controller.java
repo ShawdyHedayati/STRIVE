@@ -1,17 +1,18 @@
 package com.cobra;
 
 import com.cobra.cache.CacheManager;
-//import com.cobra.types.Goal;
-//import com.cobra.types.Transaction;
-//import com.cobra.types.*;
+import com.cobra.types.Limit;
 import com.cobra.types.Statement;
 import com.cobra.types.Transaction;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 public class Controller {
-	private DBModel dbModel;
-	private CacheManager cache;
+	private final DBModel dbModel;
+	private final CacheManager cache;
+
+	private DashboardView view;
 
 	private final ArrayDeque<Statement> actionQueue = new ArrayDeque<>();
 
@@ -19,25 +20,41 @@ public class Controller {
 
 	public Controller() {
 		this.dbModel = DBModel.getInstance();
-		this.dbModel.initDB(); // before fetch
 		this.cache = CacheManager.getInstance();
 		updateCache();
-
-//		System.out.println("Cache Loaded:");
-//		System.out.println("\tTransactions: " + cache.getTransactionList());
-//		System.out.println("\tGoals: " + cache.getGoalList());
 	}
+
+	public void setView(DashboardView view) {this.view = view;}
 
 	// event listener
 
-	public void onInsertRequested(double amount, String category) {
-//		Statement stmt = Statement.insertTransaction(nextId++, amount, category);
-//
-//		actionQueue.add(stmt);
-//		System.out.println("[Controller] Queued: " + stmt);
-//
-//		flushQueue();
+	public void onInsertTransactionRequested(double amount, String category) {
 		System.out.println("[Controller] INSERT requested: " + amount + " / " + category);
+
+		Statement stmt = new Statement.Builder(
+				Statement.QueryT.INSERT_Q,
+				Statement.TableT.TRANSACTIONS_TB)
+				.id(nextId++)
+				.amount(amount)
+				.category(category)
+				.date(java.time.LocalDate.now().toString())
+				.build();
+
+		actionQueue.add(stmt);
+		flushQueue();
+	}
+
+	public void onDeleteTransactionRequested(int id) {
+		System.out.println("[Controller] DELETE requested for id: " + id);
+
+		Statement stmt = new Statement.Builder(
+				Statement.QueryT.DELETE_Q,
+				Statement.TableT.TRANSACTIONS_TB)
+				.id(id)
+				.build();
+
+		actionQueue.add(stmt);
+		flushQueue();
 	}
 
 	// queue ->->-> model
@@ -45,28 +62,28 @@ public class Controller {
 	private void flushQueue() {
 		while (!actionQueue.isEmpty()) {
 			Statement stmt = actionQueue.poll();
-			//dbModel.ingestStatement(stmt);
-			System.out.println("[Controller] Would flush: " + stmt);
+			dbModel.ingestStatement(stmt);
 		}
-		updateCache();
+		cache.setTransactionList(new ArrayList<>(dbModel.fetchTransactions()));
+		cache.setLimitList(new ArrayList<>(dbModel.fetchLimits()));
+		notifyView();
 	}
 
 	public void updateCache() {
 		cache.setTransactionList(dbModel.fetchTransactions());
-//		cache.setGoalList(dbModel.fetchGoals());
+		cache.setLimitList(dbModel.fetchLimits());
+		System.out.println("[Controller] Cache updated - " + cache.getTransactionList().size() + " transactions, " + cache.getLimitList().size() + " limits");
+	}
 
-		// TODO: updateView()
-		// notify the view layer once view is implemented
+	private void notifyView() {
+		if (view != null) {
+			view.refresh(cache.getTransactionList(), cache.getLimitList());
+		}
 	}
 
 	public ArrayList<Transaction> getTransactions() {
 		return cache.getTransactionList();
 	}
 
-//	public ArrayList<Goal> getGoals() {
-//		return cache.getGoalList();
-//	}
-
-	// TODO: getData()
-	// pull data from model layer
+	public ArrayList<Limit> getLimits() { return cache.getLimitList();}
 }

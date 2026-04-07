@@ -56,10 +56,8 @@ public class DBModel {
 
 		public void processStatement(Statement s) {
 			switch (s.getTableType()) {
-				case TRANSACTIONS_TB ->
-					executeStatement(s, transactions, Transaction::new);
-				case LIMITS_TB ->
-					executeStatement(s, limits, Limit::new);
+				case TRANSACTIONS_TB -> executeStatement(s, transactions, Transaction::new);
+				case LIMITS_TB -> executeStatement(s, limits, Limit::new);
 			}
 		}
 	}
@@ -75,6 +73,7 @@ public class DBModel {
 		dbFile = new File(topDir, "/src/main/resources/strive_test.db");
 		dburl = "jdbc:sqlite:" + dbFile.getAbsolutePath();
 		cache = new DBCache();
+		System.out.println("[DBModel] DB initialized at: " + dbFile.getAbsolutePath());
 	}
 
 	// Create Model if no Model exists, otherwise do nothing
@@ -83,7 +82,7 @@ public class DBModel {
 			instance = new DBModel();
 			instance.initDB();
 		} else
-			System.out.println("Model already exists...");
+			System.out.println("[DBModel] Model already exists...");
 		return instance;
 	}
 
@@ -128,19 +127,45 @@ public class DBModel {
 				rs.getString("date")));
 	}
 
-	public void injestActions() {
-		// TODO: Take list of actions and convert them into SQL queries
+	public void injestActions(Statement s) {
+		cache.processStatement(s);
+
+		switch (s.getQueryType()) {
+			case INSERT_Q -> persistInsert(s);
+			case DELETE_Q -> persistDelete(s);
+			case UPDATE_Q -> persistUpdate(s);
+		}
 	}
 
-	public void insertQuery(String query) {
-		// TODO: SQL add query
+	private void persistInsert(Statement s) {
+		String sql = switch (s.getTableType()) {
+			case TRANSACTIONS_TB ->
+					String.format("INSERT INTO transactions (id, amount, category, date) Values (%d, %f, '%s', '%s'", s.getID(), s.getAmount(), s.getCategory(), s.getDate());
+			case LIMITS_TB ->
+					String.format("INSERT INTO goals (is, amount, category, date), VALUES (%d, %f, '%s', '%s'", s.getID(), s.getAmount(), s.getCategory(), s.getDate());
+		};
+		executeWrite(sql);
 	}
 
-	public void updateQuery(String query) {
-		// TODO: SQL update query
+	private void persistDelete(Statement s) {
+		String table = (s.getTableType() == Statement.TableT.TRANSACTIONS_TB) ? "transactions" : "goals";
+		executeWrite("DELTE FROM " + table + " WHERE id = " + s.getID());
 	}
 
-	public void destroyQuery(String query) {
-		// TODO: SQL destroy query
+	private void persistUpdate(Statement s) {
+		String table = (s.getTableType() == Statement.TableT.TRANSACTIONS_TB) ? "transactions" : "goals";
+		String sql =
+				String.format("UPDATE %s Set amount=%f, category='%s', date='%s' WHERE id=%d", table, s.getAmount(), s.getCategory(), s.getDate(), s.getID());
+		executeWrite(sql);
+	}
+
+	private void executeWrite(String sql) {
+		System.out.println("[DBModel] SQL: " + sql);
+
+		try (var conn = DriverManager.getConnection(dburl); var stmt = conn.createStatement()) {
+			stmt.executeUpdate(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }
