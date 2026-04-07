@@ -3,6 +3,7 @@ package com.cobra;
 import com.cobra.types.Statement;
 import com.cobra.types.Transaction;
 
+import java.io.IOException;
 import java.util.ArrayDeque;
 
 public class Controller {
@@ -49,6 +50,15 @@ public class Controller {
 		if (undoStack.isEmpty())
 			return;
 		dbModel.ingestActions(undoStack.pop());
+	}
+
+	public void onExportRequested(String filePath) {
+		try {
+			CSVExporter.export(filePath, dbModel.getTransactions(), dbModel.getLimits());
+			System.out.println("[Controller] Export saved to: " + filePath);
+		} catch (IOException e) {
+			System.err.println("[Controller] Exported failed: " + e.getMessage());
+		}
 	}
 
 	private Statement inverse(Statement s) {

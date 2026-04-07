@@ -5,7 +5,9 @@ import com.cobra.types.Transaction;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class DashboardView {
@@ -82,6 +84,22 @@ public class DashboardView {
     @FXML
     private void onUndoClicked() {
         controller.onUndoRequested();
+    }
+
+    @FXML
+    private void onExportClicked() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Export Spending Report");
+        fileChooser.setInitialFileName("strive_report.csv");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+
+        File file = fileChooser.showSaveDialog(transactionListView.getScene().getWindow());
+
+        if (file != null) {
+            controller.onExportRequested(file.getAbsolutePath());
+            statusLabel.setText("Exported to " + file.getName());
+        }
     }
 
     public void refresh(ArrayList<Transaction> transactions, ArrayList<Limit> limits) {

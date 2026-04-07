@@ -71,6 +71,9 @@
         <Button text="Undo Action"
                 onAction="#onUndoClicked"
                 style="-fx-background-color: #00000; -fx-text-fill: white;"/>
+        <Button text="Export CSV File"
+                onAction="#onExportClicked"
+                style="-fx-background-color: orange; -fx-text-fill: white;"/>
     </HBox>
 
 </VBox>
