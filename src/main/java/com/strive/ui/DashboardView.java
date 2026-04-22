@@ -456,7 +456,7 @@ public class DashboardView extends BaseView {
     // repop today's entries table
     private void refreshTodaysEntries() {
         todaysEntriesTable.getItems().setAll(
-                transactionController.getTodaysTransactions());
+                transactionController.getSessionTransactions());
     }
 
     /**

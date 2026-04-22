@@ -173,11 +173,8 @@ public class TransactionController {
      *
      * @return list of today's transaction
      */
-    public List<Transaction> getTodaysTransactions() {
-        LocalDate today = LocalDate.now();
-        return session.getTransactions().stream()
-                .filter(t -> t.date().equals(today))
-                .toList();
+    public List<Transaction> getSessionTransactions() {
+        return session.getTransactions().stream().toList();
     }
 
     /**
