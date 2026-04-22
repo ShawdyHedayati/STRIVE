@@ -174,7 +174,8 @@ public class TransactionController {
      * @return list of today's transaction
      */
     public List<Transaction> getSessionTransactions() {
-        return session.getTransactions().stream().toList();
+        java.util.Set<Integer> preloaded = session.getPreloadedTransactionIds();
+        return session.getTransactions().stream().filter(t -> !preloaded.contains(t.id())).toList();
     }
 
     /**
