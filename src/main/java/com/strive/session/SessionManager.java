@@ -43,6 +43,8 @@ public class SessionManager {
     // observers notified after every state change
     private final List<SessionListener> listeners = new ArrayList<>();
 
+    private final java.util.Set<Integer> preloadedTransactionIds = new java.util.HashSet<>();
+
     /**
      * Constructs a SessionManager and immediately loads the init state
      * from the db via provided DAOs
@@ -59,9 +61,17 @@ public class SessionManager {
                 limitDAO.fetchAll()
         );
 
+        // record which IDs came from the DB so views can exlude
+        state.getTransactions().forEach(t -> preloadedTransactionIds.add(t.id()));
+
         System.out.println("[SessionManager] Initialized with "
                 + state.getTransactions().size() + " transactions, "
                 + state.getLimits().size() + " limits.");
+    }
+
+    // getter
+    public java.util.Set<Integer> getPreloadedTransactionIds() {
+        return preloadedTransactionIds;
     }
 
     /**
