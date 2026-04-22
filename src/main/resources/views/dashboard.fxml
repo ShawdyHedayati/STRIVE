@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.strive.ui.DashboardView"
+            stylesheets="@styles.css"
+            styleClass="root-pane">
+
+    <!-- HEADER -->
+    <top>
+        <HBox styleClass="header" alignment="CENTER_LEFT" spacing="0">
+            <padding><Insets top="12" right="24" bottom="12" left="24"/></padding>
+
+            <!-- App name -->
+            <Label text="STRIVE" styleClass="app-title"/>
+
+            <!-- Spacer pushes nav to the right -->
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <!-- Navigation buttons -->
+            <HBox spacing="8" alignment="CENTER">
+                <!-- Dashboard button: active state (highlighted) -->
+                <Button text="⌂  Dashboard"
+                        styleClass="nav-btn, nav-btn-active"
+                        disable="true"/>
+
+                <!-- Charts button: navigates away -->
+                <Button text="📊  Charts"
+                        styleClass="nav-btn"
+                        onAction="#navigateToCharts"/>
+            </HBox>
+        </HBox>
+    </top>
+
+    <!-- CENTER : 2×2 island grid -->
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true"
+                    styleClass="main-scroll-pane" hbarPolicy="NEVER">
+            <content>
+                <GridPane styleClass="islands-grid" hgap="16" vgap="16">
+                    <padding><Insets top="20" right="24" bottom="20" left="24"/></padding>
+
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+                        <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="420" vgrow="ALWAYS"/>
+                        <RowConstraints minHeight="420" vgrow="ALWAYS"/>
+                    </rowConstraints>
+
+                    <!-- [Row 0, Col 0] THIS WEEK'S SPENDING BREAKDOWN -->
+                    <VBox styleClass="island-card"
+                          GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <HBox styleClass="island-header" alignment="CENTER_LEFT">
+                            <Label text="This Week's Spending Breakdown"
+                                   styleClass="island-title"/>
+                        </HBox>
+                        <Separator/>
+
+                        <!--
+                            PieChart : data populated in controller.refreshPieChart()
+                            Legend shows which color = which category.
+                            Hover tooltips are added programmatically.
+                        -->
+                        <PieChart fx:id="spendingPieChart"
+                                  legendVisible="true"
+                                  labelsVisible="false"
+                                  animated="false"
+                                  VBox.vgrow="ALWAYS"/>
+                    </VBox>
+
+                    <!-- [Row 0, Col 1] SPENDING LIMITS -->
+                    <VBox styleClass="island-card"
+                          GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <HBox styleClass="island-header" alignment="CENTER_LEFT" spacing="8">
+                            <Label text="Spending Limits" styleClass="island-title"
+                                   HBox.hgrow="ALWAYS"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <!--
+                                Add Limit button : opens Add Limit dialog.
+                                Limit cards are built dynamically in controller.refreshLimits()
+                                and injected into limitsContainer below.
+                            -->
+                            <Button fx:id="addLimitBtn"
+                                    text="+ Add Limit"
+                                    styleClass="btn-outline-sm"
+                                    onAction="#handleAddLimit"/>
+                        </HBox>
+                        <Separator/>
+
+                        <!-- Scrollable container for limit cards -->
+                        <ScrollPane styleClass="limits-scroll"
+                                    fitToWidth="true"
+                                    hbarPolicy="NEVER"
+                                    VBox.vgrow="ALWAYS">
+                            <content>
+                                <!--
+                                    limitsContainer : controller adds one VBox "limit card"
+                                    per SpendingLimit via buildLimitCard() in refreshLimits().
+                                -->
+                                <VBox fx:id="limitsContainer"
+                                      styleClass="limits-container"
+                                      spacing="10">
+                                    <padding><Insets top="8" right="4" bottom="8" left="4"/></padding>
+                                    <!-- Limit cards injected here at runtime -->
+                                </VBox>
+                            </content>
+                        </ScrollPane>
+                    </VBox>
+
+                    <!-- [Row 1, Col 0] ENTER TRANSACTION -->
+                    <VBox styleClass="island-card"
+                          GridPane.columnIndex="0" GridPane.rowIndex="1">
+                        <HBox styleClass="island-header" alignment="CENTER_LEFT">
+                            <Label text="Enter Transaction" styleClass="island-title"/>
+                        </HBox>
+                        <Separator/>
+
+                        <VBox spacing="14" VBox.vgrow="ALWAYS">
+                            <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+
+                            <!-- Category -->
+                            <VBox spacing="4">
+                                <Label text="Category" styleClass="form-label"/>
+                                <ComboBox fx:id="txCategoryCombo"
+                                          maxWidth="Infinity"
+                                          styleClass="form-combo"
+                                          promptText="Select category…"/>
+                            </VBox>
+
+                            <!-- Amount -->
+                            <VBox spacing="4">
+                                <Label text="Amount" styleClass="form-label"/>
+                                <TextField fx:id="txAmountField"
+                                           promptText="\$0.00"
+                                           styleClass="form-field"/>
+                            </VBox>
+
+                            <!-- Spending Limit status for selected category (read-only display) -->
+                            <Label fx:id="txLimitStatusLabel"
+                                   text="No limit set"
+                                   styleClass="limit-status-label"/>
+
+                            <!-- Date -->
+                            <VBox spacing="4">
+                                <Label text="Date" styleClass="form-label"/>
+                                <DatePicker fx:id="txDatePicker"
+                                            maxWidth="Infinity"
+                                            styleClass="form-date-picker"/>
+                            </VBox>
+
+                            <!-- Spacer -->
+                            <Region VBox.vgrow="ALWAYS"/>
+
+                            <!-- Action buttons -->
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Button text="Add Transaction"
+                                        styleClass="btn-primary"
+                                        onAction="#handleAddTransaction"
+                                        defaultButton="true"/>
+                                <!--
+                                    Undo: reverts the most recent Add / Edit / Delete.
+                                    Disabled when there is no history (set in controller).
+                                -->
+                                <Button fx:id="undoBtn"
+                                        text="↩ Undo"
+                                        styleClass="btn-outline"
+                                        onAction="#handleUndo"/>
+                            </HBox>
+                        </VBox>
+                    </VBox>
+
+                    <!-- [Row 1, Col 1] TODAY'S ENTRIES -->
+                    <VBox styleClass="island-card"
+                          GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <HBox styleClass="island-header" alignment="CENTER_LEFT">
+                            <Label text="Today's Entries" styleClass="island-title"/>
+                        </HBox>
+                        <Separator/>
+
+                        <!--
+                            TableView : populated by controller.refreshTodaysEntries().
+                            Shows only transactions from today.
+                            Scrollable by default when rows exceed height.
+                        -->
+                        <TableView fx:id="todaysEntriesTable"
+                                   styleClass="data-table"
+                                   VBox.vgrow="ALWAYS">
+                            <columns>
+                                <TableColumn fx:id="todaysCategoryCol" text="Category" prefWidth="130"/>
+                                <TableColumn fx:id="todaysAmountCol"   text="Amount"   prefWidth="100"/>
+                                <TableColumn fx:id="todaysDateCol"     text="Date"     prefWidth="120"/>
+                            </columns>
+                            <placeholder>
+                                <Label text="No transactions today" styleClass="table-placeholder"/>
+                            </placeholder>
+                        </TableView>
+
+                        <!-- Edit / Delete row actions -->
+                        <HBox spacing="8" styleClass="table-actions">
+                            <padding><Insets top="8" right="12" bottom="8" left="12"/></padding>
+                            <Button fx:id="editTxBtn"
+                                    text="✎  Edit"
+                                    styleClass="btn-outline-sm"
+                                    onAction="#handleEditTransaction"/>
+                            <Button fx:id="deleteTxBtn"
+                                    text="🗑  Delete"
+                                    styleClass="btn-danger-sm"
+                                    onAction="#handleDeleteTransaction"/>
+                        </HBox>
+                    </VBox>
+
+                </GridPane>
+            </content>
+        </ScrollPane>
+    </center>
+
+    <!-- FOOTER -->
+    <bottom>
+        <HBox styleClass="footer" alignment="CENTER_RIGHT">
+            <padding><Insets top="12" right="24" bottom="12" left="24"/></padding>
+            <!--
+                Save button : styleClass switches between btn-outline (saved)
+                and btn-primary (unsaved changes) in the controller.
+            -->
+            <Button fx:id="saveBtn"
+                    text="💾  Save"
+                    styleClass="btn-outline"
+                    onAction="#handleSave"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

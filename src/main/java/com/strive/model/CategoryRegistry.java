@@ -1,4 +1,4 @@
-package com.cobra.model;
+package com.strive.model;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,7 +43,7 @@ public enum CategoryRegistry {
     public String color(){ return color; }
 
     // return all cat as ordered list, match UI dropdown order
-    public static List<CategoryRegistry> getALL() { return Arrays.asList(values()); }
+    public static List<CategoryRegistry> getAll() { return Arrays.asList(values()); }
 
     // look up category by display name, not case-sensitive
     public static Optional<CategoryRegistry> fromDisplayName(String name) {

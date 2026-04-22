@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.strive.ui.ChartsView"
+            stylesheets="@styles.css"
+            styleClass="root-pane">
+
+    <!-- HEADER -->
+    <top>
+        <HBox styleClass="header" alignment="CENTER_LEFT" spacing="0">
+            <padding><Insets top="12" right="24" bottom="12" left="24"/></padding>
+
+            <Label text="STRIVE" styleClass="app-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <HBox spacing="8" alignment="CENTER">
+                <!-- Dashboard button: navigates away -->
+                <Button text="⌂  Dashboard"
+                        styleClass="nav-btn"
+                        onAction="#navigateToDashboard"/>
+
+                <!-- Charts button: active state -->
+                <Button text="📊  Charts"
+                        styleClass="nav-btn, nav-btn-active"
+                        disable="true"/>
+            </HBox>
+        </HBox>
+    </top>
+
+    <!-- CENTER : vertical stack of 3 islands -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="main-scroll-pane" hbarPolicy="NEVER">
+            <content>
+                <VBox styleClass="islands-stack" spacing="16">
+                    <padding><Insets top="20" right="24" bottom="20" left="24"/></padding>
+
+                    <!-- ISLAND 1 : ALL TRANSACTIONS -->
+                    <VBox styleClass="island-card" minHeight="380">
+                        <HBox styleClass="island-header" alignment="CENTER_LEFT" spacing="8">
+                            <Label text="All Transactions" styleClass="island-title"
+                                   HBox.hgrow="ALWAYS"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Button text="⬇ Export CSV"
+                                    styleClass="btn-outline-sm"
+                                    onAction="#handleExportCsv"/>
+                        </HBox>
+                        <Separator/>
+
+                        <!--
+                            TableView : populated by controller.refreshAllTransactions().
+                            All transactions, sorted by date (most recent first).
+                            Scrollable when rows exceed visible area.
+                        -->
+                        <TableView fx:id="allTransactionsTable"
+                                   styleClass="data-table"
+                                   VBox.vgrow="ALWAYS"
+                                   minHeight="280">
+                            <columns>
+                                <TableColumn fx:id="allCategoryCol" text="Category" prefWidth="160"/>
+                                <TableColumn fx:id="allAmountCol"   text="Amount"   prefWidth="120"/>
+                                <TableColumn fx:id="allDateCol"     text="Date"     prefWidth="140"/>
+                            </columns>
+                            <placeholder>
+                                <Label text="No transactions recorded yet" styleClass="table-placeholder"/>
+                            </placeholder>
+                        </TableView>
+
+                        <!-- Edit / Delete row actions -->
+                        <HBox spacing="8" styleClass="table-actions">
+                            <padding><Insets top="8" right="12" bottom="8" left="12"/></padding>
+                            <Button fx:id="editAllTxBtn"
+                                    text="✎  Edit"
+                                    styleClass="btn-outline-sm"
+                                    onAction="#handleEditAllTransaction"/>
+                            <Button fx:id="deleteAllTxBtn"
+                                    text="🗑  Delete"
+                                    styleClass="btn-danger-sm"
+                                    onAction="#handleDeleteAllTransaction"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- ISLANDS 2 & 3 : side by side -->
+                    <HBox spacing="16">
+
+                        <!-- ISLAND 2: THIS WEEK'S COMPARISON -->
+                        <VBox styleClass="island-card" minHeight="420" HBox.hgrow="ALWAYS">
+                            <HBox styleClass="island-header" alignment="CENTER_LEFT">
+                                <Label text="This Week's Comparison" styleClass="island-title"/>
+                            </HBox>
+                            <Separator/>
+
+                            <!--
+                                LineChart : two series built in controller.refreshWeekComparison():
+                                  "Current Week"  → blue (#3B82F6)
+                                  "Total Average" → grey (#9CA3AF)
+                                X-axis: Mon Tue Wed Thu Fri Sat Sun
+                                Hover tooltips added programmatically.
+                            -->
+                            <LineChart fx:id="weekComparisonChart"
+                                       styleClass="strive-chart"
+                                       VBox.vgrow="ALWAYS"
+                                       createSymbols="true"
+                                       animated="false">
+                                <xAxis>
+                                    <CategoryAxis label="Day of Week"/>
+                                </xAxis>
+                                <yAxis>
+                                    <NumberAxis label="Amount ($)" minorTickVisible="false"/>
+                                </yAxis>
+                            </LineChart>
+                        </VBox>
+
+                        <!-- ISLAND 3: AVERAGE SPENDING BY CATEGORY -->
+                        <VBox styleClass="island-card" minHeight="420" HBox.hgrow="ALWAYS">
+                            <HBox styleClass="island-header" alignment="CENTER_LEFT">
+                                <Label text="Average Spending by Category" styleClass="island-title"/>
+                            </HBox>
+                            <Separator/>
+
+                            <!--
+                                BarChart : one series built in controller.refreshAvgSpending().
+                                Each bar is color-coded per category (applied after render).
+                                Hover tooltips added programmatically.
+                            -->
+                            <BarChart fx:id="avgSpendingChart"
+                                      styleClass="strive-chart"
+                                      VBox.vgrow="ALWAYS"
+                                      animated="false"
+                                      legendVisible="false"
+                                      barGap="4"
+                                      categoryGap="16">
+                                <xAxis>
+                                    <CategoryAxis label="Category"/>
+                                </xAxis>
+                                <yAxis>
+                                    <NumberAxis label="Avg Amount ($)" minorTickVisible="false"/>
+                                </yAxis>
+                            </BarChart>
+                        </VBox>
+
+                    </HBox>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+
+    <!-- FOOTER -->
+    <bottom>
+        <HBox styleClass="footer" alignment="CENTER_RIGHT">
+            <padding><Insets top="12" right="24" bottom="12" left="24"/></padding>
+            <Button fx:id="saveBtn"
+                    text="💾  Save"
+                    styleClass="btn-outline"
+                    onAction="#handleSave"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

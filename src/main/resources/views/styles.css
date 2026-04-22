@@ -1,0 +1,508 @@
+/* ============================================================
+   STYLESHEET GENERATED VIA CLAUDE.AI TO OPTIMIZE EFFICIENCY
+
+   STRIVE — JavaFX Stylesheet
+   Compatible with JavaFX 21  (uses -fx- property prefix)
+   Color palette matches the original React/Tailwind design.
+   ============================================================ */
+
+/* ─────────────────────────────────────────────────────────────
+   GLOBAL / ROOT
+───────────────────────────────────────────────────────────── */
+.root {
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-size: 14px;
+    -fx-background-color: #F9FAFB;
+}
+
+.root-pane {
+    -fx-background-color: #F9FAFB;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   HEADER
+───────────────────────────────────────────────────────────── */
+.header {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 0 0 1 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 4, 0, 0, 2);
+}
+
+.app-title {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #DC2626;   /* red — matches the React STRIVE logo */
+    -fx-padding: 0 0 0 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   NAVIGATION BUTTONS
+───────────────────────────────────────────────────────────── */
+.nav-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #374151;
+    -fx-border-color: #D1D5DB;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 7px 14px;
+    -fx-cursor: hand;
+    -fx-font-size: 13px;
+}
+
+.nav-btn:hover {
+    -fx-background-color: #F3F4F6;
+}
+
+/* Active / highlighted nav button (current page) */
+.nav-btn-active {
+    -fx-background-color: #111827;
+    -fx-text-fill: #FFFFFF;
+    -fx-border-color: #111827;
+    -fx-opacity: 1.0;
+}
+
+.nav-btn-active:hover {
+    -fx-background-color: #1F2937;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   ISLAND CARDS
+───────────────────────────────────────────────────────────── */
+.island-card {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0, 0, 2);
+    -fx-padding: 0;
+}
+
+.island-header {
+    -fx-padding: 14px 16px 10px 16px;
+}
+
+.island-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SCROLLPANES
+───────────────────────────────────────────────────────────── */
+.main-scroll-pane {
+    -fx-background-color: #F9FAFB;
+    -fx-border-color: transparent;
+}
+
+.main-scroll-pane > .viewport {
+    -fx-background-color: #F9FAFB;
+}
+
+.limits-scroll {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.limits-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.limits-container {
+    -fx-padding: 8px 6px 8px 6px;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   FORM ELEMENTS (Enter Transaction island)
+───────────────────────────────────────────────────────────── */
+.form-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #374151;
+}
+
+.form-field {
+    -fx-background-color: #F3F4F6;
+    -fx-border-color: #D1D5DB;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 7px 10px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #111827;
+    -fx-prompt-text-fill: #9CA3AF;
+}
+
+.form-field:focused {
+    -fx-border-color: #6366F1;
+    -fx-background-color: #FFFFFF;
+}
+
+.form-combo {
+    -fx-background-color: #F3F4F6;
+    -fx-border-color: #D1D5DB;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 3px 4px;
+}
+
+.form-combo:focused, .form-combo:showing {
+    -fx-border-color: #6366F1;
+    -fx-background-color: #FFFFFF;
+}
+
+.form-date-picker {
+    -fx-background-color: #F3F4F6;
+    -fx-border-color: #D1D5DB;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+}
+
+.form-date-picker > .text-field {
+    -fx-background-color: transparent;
+    -fx-padding: 5px 6px;
+}
+
+/* Limit status label under amount field */
+.limit-status-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6B7280;
+    -fx-padding: 0 0 0 2px;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SPENDING LIMIT CARDS (inside limitsContainer)
+───────────────────────────────────────────────────────────── */
+.limit-card {
+    -fx-background-color: #F9FAFB;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 12px 14px;
+}
+
+.limit-category-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+.limit-spent-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6B7280;
+}
+
+.label-under-limit {
+    -fx-font-size: 12px;
+    -fx-text-fill: #059669;   /* green */
+}
+
+.label-over-limit {
+    -fx-font-size: 12px;
+    -fx-text-fill: #DC2626;   /* red */
+    -fx-font-weight: bold;
+}
+
+/* Progress bars */
+.limit-bar-ok > .bar {
+    -fx-background-color: #6366F1;   /* indigo when within limit */
+    -fx-background-radius: 4px;
+}
+
+.limit-bar-ok > .track {
+    -fx-background-color: #E5E7EB;
+    -fx-background-radius: 4px;
+}
+
+.limit-bar-over > .bar {
+    -fx-background-color: #DC2626;   /* red when over limit */
+    -fx-background-radius: 4px;
+}
+
+.limit-bar-over > .track {
+    -fx-background-color: #FEE2E2;
+    -fx-background-radius: 4px;
+}
+
+/* Limit card icon buttons */
+.icon-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #6B7280;
+    -fx-border-color: transparent;
+    -fx-padding: 2px 6px;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+.icon-btn:hover {
+    -fx-text-fill: #111827;
+    -fx-background-color: #F3F4F6;
+    -fx-background-radius: 4px;
+}
+
+.icon-btn-danger {
+    -fx-background-color: transparent;
+    -fx-text-fill: #9CA3AF;
+    -fx-border-color: transparent;
+    -fx-padding: 2px 6px;
+    -fx-font-size: 16px;
+    -fx-cursor: hand;
+}
+
+.icon-btn-danger:hover {
+    -fx-text-fill: #DC2626;
+    -fx-background-color: #FEF2F2;
+    -fx-background-radius: 4px;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   TABLE VIEWS
+───────────────────────────────────────────────────────────── */
+.data-table {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.data-table .column-header-background {
+    -fx-background-color: #F9FAFB;
+}
+
+.data-table .column-header {
+    -fx-background-color: #F9FAFB;
+    -fx-border-color: transparent transparent #E5E7EB transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.data-table .column-header .label {
+    -fx-text-fill: #6B7280;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 8px 12px;
+}
+
+.data-table .table-row-cell {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: transparent transparent #F3F4F6 transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 0;
+}
+
+.data-table .table-row-cell:odd {
+    -fx-background-color: #FAFAFA;
+}
+
+.data-table .table-row-cell:selected {
+    -fx-background-color: #EEF2FF;
+}
+
+.data-table .table-cell {
+    -fx-text-fill: #111827;
+    -fx-padding: 9px 12px;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.data-table .table-row-cell:selected .table-cell {
+    -fx-text-fill: #1E1B4B;
+}
+
+.table-placeholder {
+    -fx-text-fill: #9CA3AF;
+    -fx-font-size: 13px;
+}
+
+.table-actions {
+    -fx-background-color: #F9FAFB;
+    -fx-border-color: #E5E7EB transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+    -fx-background-radius: 0 0 10 10;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   CHARTS (PieChart, LineChart, BarChart)
+───────────────────────────────────────────────────────────── */
+.chart {
+    -fx-background-color: transparent;
+    -fx-padding: 10px;
+}
+
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.chart-legend {
+    -fx-background-color: transparent;
+    -fx-padding: 4px;
+}
+
+.strive-chart {
+    -fx-background-color: transparent;
+    -fx-padding: 10px 10px 10px 10px;
+}
+
+.strive-chart .chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+/* Line chart: current week = blue, average = grey (applied in controller) */
+.chart-series-line {
+    -fx-stroke-width: 2.5px;
+}
+
+/* Axis labels */
+.axis-label {
+    -fx-text-fill: #6B7280;
+    -fx-font-size: 12px;
+}
+
+.axis {
+    -fx-tick-label-fill: #6B7280;
+    -fx-tick-label-font-size: 11px;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   BUTTONS
+───────────────────────────────────────────────────────────── */
+
+/* Primary — dark fill */
+.btn-primary {
+    -fx-background-color: #111827;
+    -fx-text-fill: #FFFFFF;
+    -fx-border-color: #111827;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 8px 16px;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+}
+
+.btn-primary:hover {
+    -fx-background-color: #1F2937;
+}
+
+/* Outline — transparent fill with border */
+.btn-outline {
+    -fx-background-color: transparent;
+    -fx-text-fill: #374151;
+    -fx-border-color: #D1D5DB;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 8px 16px;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+}
+
+.btn-outline:hover {
+    -fx-background-color: #F3F4F6;
+}
+
+/* Smaller outline for island headers */
+.btn-outline-sm {
+    -fx-background-color: transparent;
+    -fx-text-fill: #374151;
+    -fx-border-color: #D1D5DB;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px 10px;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+}
+
+.btn-outline-sm:hover {
+    -fx-background-color: #F3F4F6;
+}
+
+/* Danger / delete */
+.btn-danger-sm {
+    -fx-background-color: transparent;
+    -fx-text-fill: #DC2626;
+    -fx-border-color: #FCA5A5;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px 10px;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+}
+
+.btn-danger-sm:hover {
+    -fx-background-color: #FEF2F2;
+    -fx-border-color: #DC2626;
+}
+
+/* Disabled state for all buttons */
+.button:disabled {
+    -fx-opacity: 0.45;
+    -fx-cursor: default;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────────────────────────── */
+.footer {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1 0 0 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SEPARATOR
+───────────────────────────────────────────────────────────── */
+.separator .line {
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   DIALOGS
+───────────────────────────────────────────────────────────── */
+.dialog-pane {
+    -fx-background-color: #FFFFFF;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: #F9FAFB;
+    -fx-background-radius: 10px 10px 0 0;
+}
+
+.dialog-pane .header-panel .label {
+    -fx-text-fill: #111827;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+.dialog-pane .content {
+    -fx-padding: 16px 20px;
+}
+
+.dialog-pane .button-bar {
+    -fx-padding: 10px 16px;
+    -fx-background-color: #F9FAFB;
+}
+
+.dialog-content {
+    -fx-padding: 4px;
+    -fx-spacing: 8px;
+}
+
+.error-label {
+    -fx-text-fill: #DC2626;
+    -fx-font-size: 12px;
+    -fx-wrap-text: true;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   ISLANDS GRID / STACK LAYOUT
+───────────────────────────────────────────────────────────── */
+.islands-grid {
+    -fx-background-color: transparent;
+}
+
+.islands-stack {
+    -fx-background-color: transparent;
+}
