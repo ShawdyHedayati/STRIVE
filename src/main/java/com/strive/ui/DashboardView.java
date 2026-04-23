@@ -38,6 +38,8 @@ import java.util.ResourceBundle;
  * by {@link STRIVEApp} before any fxml is loaded
  */
 
+// TODO: hover over for charts
+
 public class DashboardView extends BaseView {
     // ISLAND 1 - this weeks spending breakdown
     @FXML private PieChart spendingPieChart;
@@ -401,6 +403,8 @@ public class DashboardView extends BaseView {
         syncSaveButton();
         syncUndoButton();
     }
+
+    //TODO: The current pie chart colors does not match the colors in the enum for categories (refer to dot color)
 
     // rebuild the pie chart from this week's spending totals
     private void refreshPieChart() {

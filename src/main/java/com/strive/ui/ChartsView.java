@@ -33,6 +33,8 @@ import java.util.ResourceBundle;
  * Backed controllers are fetched from {@link AppContext}
  */
 
+// TODO: hover over for charts
+
 public class ChartsView extends BaseView {
 
     // ISLAND 1 : all transactions
