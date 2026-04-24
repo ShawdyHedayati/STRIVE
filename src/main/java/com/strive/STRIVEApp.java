@@ -26,6 +26,9 @@ import java.util.Objects;
  * Each FXML controller retieves its backend controllers from AppContext
  */
 
+	// TODO: IN MAC FULLSCREEN - dialog boxes (exit app no save, add transaction, edit transaction) is detected as a separate window and not a pop up
+	// TODO: adding images to project (Logo, Icons)
+
 public class STRIVEApp extends Application {
 	private static Stage primaryStage;
 
