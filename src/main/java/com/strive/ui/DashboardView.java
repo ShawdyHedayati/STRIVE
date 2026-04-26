@@ -418,8 +418,6 @@ public class DashboardView extends BaseView {
         syncUndoButton();
     }
 
-    //TODO: The current pie chart colors does not match the colors in the enum for categories (refer to dot color)
-
     // rebuild the pie chart from this week's spending totals
     private void refreshPieChart() {
         // capture and reset immediately; prevents limit triggered refresh
