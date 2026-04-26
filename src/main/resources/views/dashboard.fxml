@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+
 
 <BorderPane xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
@@ -68,11 +69,18 @@
                             Legend shows which color = which category.
                             Hover tooltips are added programmatically.
                         -->
-                        <PieChart fx:id="spendingPieChart"
-                                  legendVisible="true"
-                                  labelsVisible="false"
-                                  animated="false"
-                                  VBox.vgrow="ALWAYS"/>
+                        <StackPane VBox.vgrow="ALWAYS">
+
+                            <PieChart fx:id="spendingPieChart"
+                                      legendVisible="true"
+                                      labelsVisible="false"
+                                      animated="true"/>
+
+                            <Label fx:id="noSpendingDataLabel"
+                                   text="No data entered yet."
+                                   style="-fx-text-fill: gray; -fx-font-size: 20px;"/>
+
+                        </StackPane>
                     </VBox>
 
                     <!-- [Row 0, Col 1] SPENDING LIMITS -->
@@ -95,23 +103,29 @@
                         <Separator/>
 
                         <!-- Scrollable container for limit cards -->
-                        <ScrollPane styleClass="limits-scroll"
-                                    fitToWidth="true"
-                                    hbarPolicy="NEVER"
-                                    VBox.vgrow="ALWAYS">
-                            <content>
-                                <!--
-                                    limitsContainer : controller adds one VBox "limit card"
-                                    per SpendingLimit via buildLimitCard() in refreshLimits().
-                                -->
-                                <VBox fx:id="limitsContainer"
-                                      styleClass="limits-container"
-                                      spacing="10">
-                                    <padding><Insets top="8" right="4" bottom="8" left="4"/></padding>
-                                    <!-- Limit cards injected here at runtime -->
-                                </VBox>
-                            </content>
-                        </ScrollPane>
+                        <StackPane VBox.vgrow="ALWAYS">
+
+                            <ScrollPane styleClass="limits-scroll"
+                                        fitToWidth="true"
+                                        hbarPolicy="NEVER">
+
+                                <content>
+                                    <VBox fx:id="limitsContainer"
+                                          styleClass="limits-container"
+                                          spacing="10">
+                                        <padding>
+                                            <Insets top="8" right="4" bottom="8" left="4"/>
+                                        </padding>
+                                    </VBox>
+                                </content>
+
+                            </ScrollPane>
+
+                            <Label fx:id="noLimitsDataLabel"
+                                   text="No limits entered yet."
+                                   style="-fx-text-fill: gray; -fx-font-size: 20px;"/>
+
+                        </StackPane>
                     </VBox>
 
                     <!-- [Row 1, Col 0] ENTER TRANSACTION -->
@@ -198,7 +212,7 @@
                                 <TableColumn fx:id="todaysDateCol"     text="Date"     prefWidth="120"/>
                             </columns>
                             <placeholder>
-                                <Label text="No transactions today" styleClass="table-placeholder"/>
+                                <Label text="No transactions today." styleClass="table-placeholder" style="-fx-text-fill: gray; -fx-font-size: 20px;"/>
                             </placeholder>
                         </TableView>
 
