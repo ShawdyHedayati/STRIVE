@@ -46,17 +46,20 @@ public class SpendingCalculator {
     public List<PieSlice> pieChartData(List<Transaction> transactions) {
         Map<String, Double> byCategory = weeklyByCategory(transactions);
         double total = byCategory.values().stream().mapToDouble(Double::doubleValue).sum();
-        if (total == 0) return List.of();
+        if (total <= 0) return List.of();
 
         return byCategory.entrySet().stream()
+                .sorted(Comparator.comparingInt(e ->
+                        CategoryRegistry.fromDisplayName(e.getKey())
+                                .map(Enum::ordinal)
+                                .orElse(Integer.MAX_VALUE)))
                 .map(e -> new PieSlice(
                         e.getKey(),
                         e.getValue(),
-                        // round 2 dec places for display
-                        total == 0 ? 0 : Math.round((e.getValue() / total) * 10000.0) / 100.0,
-                        CategoryRegistry.colorFor(e.getKey())
+                        // total > 0 is guarateed by guard above
+                        Math.round((e.getValue() / total) * 10000.0) / 100.0
                 ))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -67,5 +70,5 @@ public class SpendingCalculator {
      * @param percent percentage of total weekly spending (0-100, 2 dec places)
      * @param color hex color from {@link CategoryRegistry}
      */
-    public record PieSlice(String category, double amount, double percent, String color) {}
+    public record PieSlice(String category, double amount, double percent) {}
 }

@@ -459,26 +459,29 @@ public class DashboardView extends BaseView {
             spendingPieChart.getData().add(data);
         });
 
-        Platform.runLater(() -> Platform.runLater(() -> {
+        Platform.runLater(() -> {
             int i = 0;
             for (PieChart.Data d : spendingPieChart.getData()) {
                 if (i >= slices.size()) break;
+                String color = CategoryRegistry.colorFor(slices.get(i).category());
                 if (d.getNode() != null) {
-                    d.getNode().setStyle(
-                            "-fx-pie-color: " + slices.get(i).color() + ";");
+                    d.getNode().setStyle("-fx-pie-color: " + color + ";");
                 }
                 i++;
             }
 
-            int j = 0;
-            for (javafx.scene.Node legendItem :
-                    spendingPieChart.lookupAll(".chart-legend-item-symbol")) {
-
-                if (j >= slices.size()) break;
-
-                legendItem.setStyle("-fx-background-color: " + slices.get(j).color() + ";");
-
-                j++;
+            for (javafx.scene.Node item :
+                    spendingPieChart.lookupAll(".chart-legend-item")) {
+                if (!(item instanceof javafx.scene.control.Label)) continue;
+                javafx.scene.control.Label label = (javafx.scene.control.Label) item;
+                String text = label.getText(); // e.g. "Housing 100%"
+                javafx.scene.Node symbol = label.getGraphic();
+                if (symbol == null) continue;
+                slices.stream()
+                        .filter(s -> text.startsWith(s.category()))
+                        .findFirst()
+                        .ifPresent(s -> symbol.setStyle(
+                                "-fx-background-color: " + CategoryRegistry.colorFor(s.category()) + ";"));
             }
 
             if (shouldAnimate) {
@@ -487,15 +490,13 @@ public class DashboardView extends BaseView {
                     spendingPieChart.setScaleY(.15);
 
                     ScaleTransition grow = new ScaleTransition(Duration.millis(550), spendingPieChart);
-
                     grow.setToX(1);
                     grow.setToY(1);
-
                     grow.play();
 
                     pieAnimatedOnce = true;
                 } else {
-                    //subsequent transacitons: subtle pulse to singal the update
+                    // subsequent transactions: subtle pulse to signal the update
                     ScaleTransition pulse = new ScaleTransition(Duration.millis(160), spendingPieChart);
                     pulse.setFromX(1.0);
                     pulse.setFromY(1);
@@ -506,7 +507,7 @@ public class DashboardView extends BaseView {
                     pulse.play();
                 }
             }
-        }));
+        });
     }
 
     // rebuild the Spending Limits island; one card per active limit
