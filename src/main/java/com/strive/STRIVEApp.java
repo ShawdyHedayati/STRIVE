@@ -75,8 +75,11 @@ public class STRIVEApp extends Application {
 						javafx.scene.control.Alert.AlertType.CONFIRMATION);
 				alert.initOwner(primaryStage);
 				alert.initModality(Modality.WINDOW_MODAL);
+				alert.setOnShown(ev -> {
+					Stage s = (Stage) alert.getDialogPane().getScene().getWindow();
+					s.setOnCloseRequest(Event::consume);
+				});
 				alert.setTitle("Unsaved Changes");
-				alert.setOnCloseRequest(Event::consume);
 				alert.setHeaderText("You have unsaved changes.");
 				alert.setContentText(
 						"Are you sure you want to exit without saving? " + "None of the changes made will be saved.");

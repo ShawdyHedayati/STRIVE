@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.util.Objects;
 
@@ -37,7 +38,10 @@ public abstract class BaseView implements Initializable, SessionListener {
     protected void initDialog(javafx.scene.control.Dialog<?> d) {
         d.initOwner(com.strive.STRIVEApp.getPrimaryStage());
         d.initModality(Modality.WINDOW_MODAL);
-        d.setOnCloseRequest(Event::consume);
+        d.setOnShown(e -> {
+            Stage s = (Stage) d.getDialogPane().getScene().getWindow();
+            s.setOnCloseRequest(Event::consume);
+        });
     }
 
     protected void showError(String title, String message) {
