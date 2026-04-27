@@ -3,9 +3,16 @@ package com.strive.ui;
 import com.strive.controller.NavigationController;
 import com.strive.session.SessionListener;
 
+import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.paint.Color;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.util.Objects;
 
@@ -32,8 +39,21 @@ public abstract class BaseView implements Initializable, SessionListener {
                 getClass().getResource("/views/styles.css")).toExternalForm());
     }
 
+    protected void initDialog(javafx.scene.control.Dialog<?> d) {
+        d.initOwner(com.strive.STRIVEApp.getPrimaryStage());
+        d.initModality(Modality.WINDOW_MODAL);
+        d.initStyle(StageStyle.UNDECORATED);
+        d.setOnShown(e -> {
+            Stage s = (Stage) d.getDialogPane().getScene().getWindow();
+            d.getDialogPane().getScene().setFill(Color.TRANSPARENT);
+
+            s.setOnCloseRequest(Event::consume);
+        });
+    }
+
     protected void showError(String title, String message) {
         Alert a = new Alert(Alert.AlertType.ERROR);
+        initDialog(a);
         a.setTitle(title);
         a.setHeaderText(null);
         a.setContentText(message);
@@ -43,6 +63,7 @@ public abstract class BaseView implements Initializable, SessionListener {
 
     protected void showInfo(String title, String message) {
         Alert a = new Alert(Alert.AlertType.INFORMATION);
+        initDialog(a);
         a.setTitle(title);
         a.setHeaderText(null);
         a.setContentText(message);

@@ -8,10 +8,15 @@ import com.strive.model.TransactionDAO;
 import com.strive.session.SessionManager;
 
 import javafx.application.Application;
+import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,6 +76,14 @@ public class STRIVEApp extends Application {
 			if (nc.hasUnsavedChanges()) {
 				javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
 						javafx.scene.control.Alert.AlertType.CONFIRMATION);
+				alert.initOwner(primaryStage);
+				alert.initModality(Modality.WINDOW_MODAL);
+				alert.initStyle(StageStyle.UNDECORATED);
+				alert.setOnShown(ev -> {
+					Stage s = (Stage) alert.getDialogPane().getScene().getWindow();
+					alert.getDialogPane().getScene().setFill(Color.TRANSPARENT);
+					s.setOnCloseRequest(Event::consume);
+				});
 				alert.setTitle("Unsaved Changes");
 				alert.setHeaderText("You have unsaved changes.");
 				alert.setContentText(

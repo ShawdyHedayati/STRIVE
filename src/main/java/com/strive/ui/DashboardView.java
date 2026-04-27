@@ -26,6 +26,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.animation.ScaleTransition;
+import javafx.util.Duration;
 
 /**
  * JavaFX "controller" for the Dashboard view (dashboard.fxml)
@@ -43,11 +45,13 @@ import java.util.ResourceBundle;
 public class DashboardView extends BaseView {
     // ISLAND 1 - this weeks spending breakdown
     @FXML private PieChart spendingPieChart;
-
+    private boolean pieAnimatedOnce = false;
+    private boolean animatePieOnNextRefresh = false;
     // ISLAND 2 - spending limits
     // dynamic contrainer; limits cards added/removed here at runtime
     @FXML private VBox limitsContainer;
-
+    @FXML private Label noSpendingDataLabel;
+    @FXML private Label noLimitsDataLabel;
     // ISLAND 3 - enter transaction
     @FXML private ComboBox<String> txCategoryCombo;
     @FXML private TextField txAmountField;
@@ -69,6 +73,8 @@ public class DashboardView extends BaseView {
 
     // handles limit actions
     private LimitController limitController;
+
+    private List<SpendingCalculator.PieSlice> lastPieSlices = List.of();
 
     // INIT
     @Override
@@ -115,10 +121,10 @@ public class DashboardView extends BaseView {
         deleteTxBtn.setDisable(true);
         todaysEntriesTable.getSelectionModel().selectedItemProperty().addListener(
                 (obs, oldSel, newSel) -> {
-            boolean hasSel = newSel != null;
-            editTxBtn.setDisable(!hasSel);
-            deleteTxBtn.setDisable(!hasSel);
-        });
+                    boolean hasSel = newSel != null;
+                    editTxBtn.setDisable(!hasSel);
+                    deleteTxBtn.setDisable(!hasSel);
+                });
 
         // sync save button visual state with session dirty flag
         syncSaveButton();
@@ -176,8 +182,8 @@ public class DashboardView extends BaseView {
         }
 
         // delegate to controller -> session -> in mem state (not db yet)
+        animatePieOnNextRefresh = true;
         transactionController.addTransaction(amount, category, date);
-
         // reset from fields
         txAmountField.clear();
         txDatePicker.setValue(LocalDate.now());
@@ -193,8 +199,10 @@ public class DashboardView extends BaseView {
 
     @FXML
     private void handleUndo() {
+
+        animatePieOnNextRefresh = true;
+
         transactionController.undo();
-        // refresh() fires aut via onSessionUpdated
     }
 
     // TODAY'S ENTRIES : handlers
@@ -205,6 +213,7 @@ public class DashboardView extends BaseView {
         if (selected == null) return;
 
         Dialog<ButtonType> dialog = new Dialog<>();
+        initDialog(dialog);
         dialog.setTitle("Edit Transaction");
         dialog.setHeaderText("Update transaction details");
 
@@ -216,6 +225,10 @@ public class DashboardView extends BaseView {
 
         DatePicker dp = new DatePicker(selected.date());
 
+        Label errorLabel = new Label();
+        errorLabel.getStyleClass().add("error-label");
+        errorLabel.setVisible(false);
+
         VBox content = new VBox(8,
                 new Label("Category:"), catCombo,
                 new Label("Amount:"),   amtField,
@@ -225,16 +238,29 @@ public class DashboardView extends BaseView {
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         applyStyles(dialog.getDialogPane());
 
+        Button okBtn = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+        okBtn.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+            try {
+                double amt = Double.parseDouble(amtField.getText().trim());
+                if (amt <= 0) throw new NumberFormatException();
+                errorLabel.setVisible(false);
+            } catch (NumberFormatException e) {
+                errorLabel.setText("Please enter a valid amount greater than 0.");
+                errorLabel.setVisible(true);
+                event.consume();
+            }
+        });
+
         Optional<ButtonType> result = dialog.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            try {
-                double newAmount = Double.parseDouble(amtField.getText().trim());
-                transactionController.editTransaction(
-                        selected.id(), newAmount, catCombo.getValue(), dp.getValue());
-                // refresh() fires automatically via onSessionUpdated()
-            } catch (NumberFormatException e) {
-                showError("Invalid Amount", "Please enter a valid number.");
-            }
+            double newAmount = Double.parseDouble(amtField.getText().trim());
+            animatePieOnNextRefresh = true;
+            transactionController.editTransaction(
+                    selected.id(),
+                    newAmount,
+                    catCombo.getValue(),
+                    dp.getValue());
+            // refresh() fires automatically via onSessionUpdated()
         }
     }
 
@@ -244,6 +270,7 @@ public class DashboardView extends BaseView {
         if (selected == null) return;
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        initDialog(confirm);
         confirm.setTitle("Delete Transaction");
         confirm.setHeaderText("Are you sure?");
         confirm.setContentText("This transaction will be removed.");
@@ -251,6 +278,7 @@ public class DashboardView extends BaseView {
 
         confirm.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
+                animatePieOnNextRefresh = true;
                 transactionController.deleteTransaction(selected.id());
                 // refresh() fires automatically via onSessionUpdated()
             }
@@ -262,6 +290,7 @@ public class DashboardView extends BaseView {
     @FXML
     private void handleAddLimit() {
         Dialog<ButtonType> dialog = new Dialog<>();
+        initDialog(dialog);
         dialog.setTitle("Add Spending Limit");
         dialog.setHeaderText("Set a weekly spending limit for a category");
 
@@ -289,23 +318,28 @@ public class DashboardView extends BaseView {
         Button okBtn = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
         okBtn.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
             String cat = catCombo.getValue();
-            if (limitController.categoryLimitExists(cat)) {
+            String amtText = amtField.getText().trim();
+            double amt = -1;
+            try { amt = Double.parseDouble(amtText); } catch (NumberFormatException ignored) {}
+
+            if (amt <= 0) {
+                errorLabel.setText("Please enter a valid amount greater than 0.");
+                errorLabel.setVisible(true);
+                event.consume();
+            } else if (limitController.categoryLimitExists(cat)) {
                 errorLabel.setText("A limit for " + cat +
                         " already exists, please select that limit to edit.");
                 errorLabel.setVisible(true);
-                event.consume(); // keep dialog open
+                event.consume();
+            } else {
+                errorLabel.setVisible(false);
             }
         });
 
         dialog.showAndWait().ifPresent(result -> {
             if (result == ButtonType.OK) {
-                try {
-                    double amt = Double.parseDouble(amtField.getText().trim());
-                    limitController.addLimit(catCombo.getValue(), amt);
-                    // refresh() fires automatically via onSessionUpdated()
-                } catch (NumberFormatException e) {
-                    showError("Invalid Amount", "Please enter a valid number.");
-                }
+                double amt = Double.parseDouble(amtField.getText().trim());
+                limitController.addLimit(catCombo.getValue(), amt);
             }
         });
     }
@@ -317,6 +351,7 @@ public class DashboardView extends BaseView {
      */
     public void handleEditLimit(SpendingLimit limit) {
         Dialog<ButtonType> dialog = new Dialog<>();
+        initDialog(dialog);
         dialog.setTitle("Edit Spending Limit");
         dialog.setHeaderText("Update limit for " + limit.category());
 
@@ -343,24 +378,29 @@ public class DashboardView extends BaseView {
         Button okBtn = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
         okBtn.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
             String newCat = catCombo.getValue();
-            if (!newCat.equalsIgnoreCase(limit.category())
+            double amt = -1;
+            try { amt = Double.parseDouble(amtField.getText().trim()); } catch (NumberFormatException ignored) {}
+
+            if (amt <= 0) {
+                errorLabel.setText("Please enter a valid amount greater than 0.");
+                errorLabel.setVisible(true);
+                event.consume();
+            } else if (!newCat.equalsIgnoreCase(limit.category())
                     && limitController.categoryLimitExists(newCat)) {
                 errorLabel.setText("A limit for " + newCat +
                         " already exists, please select that limit to edit.");
                 errorLabel.setVisible(true);
                 event.consume();
+            } else {
+                errorLabel.setVisible(false);
             }
         });
 
         dialog.showAndWait().ifPresent(result -> {
             if (result == ButtonType.OK) {
-                try {
-                    double amt = Double.parseDouble(amtField.getText().trim());
-                    limitController.editLimit(limit.id(), catCombo.getValue(), amt);
-                    // refresh() fires automatically via onSessionUpdated()
-                } catch (NumberFormatException e) {
-                    showError("Invalid Amount", "Please enter a valid number.");
-                }
+                double amt = Double.parseDouble(amtField.getText().trim());
+                limitController.editLimit(limit.id(), catCombo.getValue(), amt);
+                // refresh() fires automatically via onSessionUpdated()
             }
         });
     }
@@ -372,6 +412,7 @@ public class DashboardView extends BaseView {
      */
     public void handleDeleteLimit(SpendingLimit limit) {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        initDialog(confirm);
         confirm.setTitle("Delete Limit");
         confirm.setHeaderText("Delete spending limit for " + limit.category() + "?");
         confirm.setContentText("This action cannot be undone.");
@@ -404,53 +445,118 @@ public class DashboardView extends BaseView {
         syncUndoButton();
     }
 
-    //TODO: The current pie chart colors does not match the colors in the enum for categories (refer to dot color)
-
     // rebuild the pie chart from this week's spending totals
     private void refreshPieChart() {
+        // capture and reset immediately; prevents limit triggered refresh
+        // from inherenting stale true val due to nested runLater timing
+        boolean shouldAnimate = animatePieOnNextRefresh;
+        animatePieOnNextRefresh = false;
+
+        List<SpendingCalculator.PieSlice> slices =
+                transactionController.getPieChartData();
+
+        if (slices.equals(lastPieSlices) && !shouldAnimate) return;
+        lastPieSlices = slices;
+
         spendingPieChart.getData().clear();
 
-        List<SpendingCalculator.PieSlice> slices = transactionController.getPieChartData();
+        // Show placeholder if empty
+        if (slices.isEmpty()) {
+            spendingPieChart.setVisible(false);
+            spendingPieChart.setManaged(false);
+            noSpendingDataLabel.setVisible(true);
+            noSpendingDataLabel.setManaged(true);
+            return;
+        }
+
+        // Hide placeholder when data exists
+        spendingPieChart.setVisible(true);
+        spendingPieChart.setManaged(true);
+        noSpendingDataLabel.setVisible(false);
+        noSpendingDataLabel.setManaged(false);
+
         slices.forEach(slice -> {
             PieChart.Data data = new PieChart.Data(
-                    slice.category() + " " + String.format("%.0f%%", slice.percent()),
+                    slice.category() + " " +
+                            String.format("%.0f%%", slice.percent()),
                     slice.amount());
+
             spendingPieChart.getData().add(data);
         });
 
-        // Double runLater ensures nodes are fully attached to scene graph
-        // before styles are applied, preventing JavaFX default colors overwriting ours
-        Platform.runLater(() -> Platform.runLater(() -> {
+        Platform.runLater(() -> {
             int i = 0;
             for (PieChart.Data d : spendingPieChart.getData()) {
                 if (i >= slices.size()) break;
+                String color = CategoryRegistry.colorFor(slices.get(i).category());
                 if (d.getNode() != null) {
-                    d.getNode().setStyle(
-                            "-fx-pie-color: " + slices.get(i).color() + ";");
+                    d.getNode().setStyle("-fx-pie-color: " + color + ";");
                 }
                 i++;
             }
 
-            // Color the legend dots to match
-            int j = 0;
-            for (javafx.scene.Node legendItem :
-                    spendingPieChart.lookupAll(".chart-legend-item-symbol")) {
-                if (j >= slices.size()) break;
-                legendItem.setStyle(
-                        "-fx-background-color: " + slices.get(j).color() + ";");
-                j++;
+            for (javafx.scene.Node item :
+                    spendingPieChart.lookupAll(".chart-legend-item")) {
+                if (!(item instanceof javafx.scene.control.Label)) continue;
+                javafx.scene.control.Label label = (javafx.scene.control.Label) item;
+                String text = label.getText(); // e.g. "Housing 100%"
+                javafx.scene.Node symbol = label.getGraphic();
+                if (symbol == null) continue;
+                slices.stream()
+                        .filter(s -> text.startsWith(s.category()))
+                        .findFirst()
+                        .ifPresent(s -> symbol.setStyle(
+                                "-fx-background-color: " + CategoryRegistry.colorFor(s.category()) + ";"));
             }
-        }));
+
+            if (shouldAnimate) {
+                if (!pieAnimatedOnce) {
+                    spendingPieChart.setScaleX(.15);
+                    spendingPieChart.setScaleY(.15);
+
+                    ScaleTransition grow = new ScaleTransition(Duration.millis(550), spendingPieChart);
+                    grow.setToX(1);
+                    grow.setToY(1);
+                    grow.play();
+
+                    pieAnimatedOnce = true;
+                } else {
+                    // subsequent transactions: subtle pulse to signal the update
+                    ScaleTransition pulse = new ScaleTransition(Duration.millis(160), spendingPieChart);
+                    pulse.setFromX(1.0);
+                    pulse.setFromY(1);
+                    pulse.setToX(1.06);
+                    pulse.setToY(1.06);
+                    pulse.setAutoReverse(true);
+                    pulse.setCycleCount(2);
+                    pulse.play();
+                }
+            }
+        });
     }
 
     // rebuild the Spending Limits island; one card per active limit
     private void refreshLimits() {
         limitsContainer.getChildren().clear();
 
-        List<LimitCalculator.LimitBarData> bars = transactionController.getLimitBarData();
-        List<SpendingLimit> limits = limitController.getAllLimits();
+        List<LimitCalculator.LimitBarData> bars =
+                transactionController.getLimitBarData();
 
-        // Build one card per limit, matched by position (both lists are in insertion order)
+        List<SpendingLimit> limits =
+                limitController.getAllLimits();
+
+        // Show placeholder if no limits yet
+        if (limits.isEmpty()) {
+            noLimitsDataLabel.setVisible(true);
+            noLimitsDataLabel.setManaged(true);
+
+            return;
+        }
+
+        // Hide placeholder once populated
+        noLimitsDataLabel.setVisible(false);
+        noLimitsDataLabel.setManaged(false);
+
         for (int i = 0; i < limits.size() && i < bars.size(); i++) {
             limitsContainer.getChildren().add(
                     buildLimitCard(limits.get(i), bars.get(i)));
@@ -478,7 +584,12 @@ public class DashboardView extends BaseView {
                     .mapToDouble(LimitCalculator.LimitBarData::spent)
                     .findFirst().orElse(0.0);
             double remaining = limit.amount() - spent;
-            if (remaining >= 0) {
+            if (remaining == 0) {
+                txLimitStatusLabel.setText("Limit reached");
+                if(!txLimitStatusLabel.getStyleClass().contains("label-over-limit")) {
+                    txLimitStatusLabel.getStyleClass().add("label-over-limit");
+                }
+            } else if (remaining > 0) {
                 txLimitStatusLabel.setText(String.format("Limit: $%.2f remaining", remaining));
                 txLimitStatusLabel.getStyleClass().removeAll("label-over-limit");
             } else {
@@ -513,7 +624,10 @@ public class DashboardView extends BaseView {
         catLabel.getStyleClass().add("limit-category-label");
 
         // amount remaining or over
-        Label amtLabel = new Label(isOver
+        Label amtLabel = new Label(
+                bar.spent() == bar.limitAmount()
+                ? "Limit reached"
+                : isOver
                 ? String.format("-$%.2f over limit", bar.spent() - bar.limitAmount())
                 : String.format("$%.2f remaining", bar.limitAmount() - bar.spent()));
         amtLabel.getStyleClass().add(isOver ? "label-over-limit" : "label-under-limit");
