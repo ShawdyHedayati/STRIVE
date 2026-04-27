@@ -3,6 +3,7 @@ package com.strive.ui;
 import com.strive.controller.NavigationController;
 import com.strive.session.SessionListener;
 
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -36,6 +37,7 @@ public abstract class BaseView implements Initializable, SessionListener {
     protected void initDialog(javafx.scene.control.Dialog<?> d) {
         d.initOwner(com.strive.STRIVEApp.getPrimaryStage());
         d.initModality(Modality.WINDOW_MODAL);
+        d.setOnCloseRequest(Event::consume);
     }
 
     protected void showError(String title, String message) {

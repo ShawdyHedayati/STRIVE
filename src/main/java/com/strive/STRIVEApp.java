@@ -8,6 +8,7 @@ import com.strive.model.TransactionDAO;
 import com.strive.session.SessionManager;
 
 import javafx.application.Application;
+import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -75,6 +76,7 @@ public class STRIVEApp extends Application {
 				alert.initOwner(primaryStage);
 				alert.initModality(Modality.WINDOW_MODAL);
 				alert.setTitle("Unsaved Changes");
+				alert.setOnCloseRequest(Event::consume);
 				alert.setHeaderText("You have unsaved changes.");
 				alert.setContentText(
 						"Are you sure you want to exit without saving? " + "None of the changes made will be saved.");
