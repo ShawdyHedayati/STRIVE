@@ -1,14 +1,14 @@
 package com.strive;
 
-import com.strive.bll.CSVExporter;
+import com.strive.util.CSVExporter;
 import com.strive.bll.ChartCalculator;
 import com.strive.bll.LimitCalculator;
 import com.strive.bll.SpendingCalculator;
 import com.strive.controller.LimitController;
 import com.strive.controller.NavigationController;
 import com.strive.controller.TransactionController;
-import com.strive.model.LimitDAO;
-import com.strive.model.TransactionDAO;
+import com.strive.model.dao.LimitDAO;
+import com.strive.model.dao.TransactionDAO;
 import com.strive.session.SessionManager;
 
 import javafx.application.Application;
@@ -16,7 +16,6 @@ import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;

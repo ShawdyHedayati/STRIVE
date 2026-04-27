@@ -1,4 +1,7 @@
-package com.strive.session;
+package com.strive.session.command;
+
+import com.strive.session.SessionManager;
+import com.strive.session.SessionState;
 
 /**
  * Represents a single reversible user action in the session command log

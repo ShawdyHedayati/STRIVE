@@ -1,6 +1,7 @@
-package com.strive.session;
+package com.strive.session.command;
 
 import com.strive.model.DBRecord;
+import com.strive.session.SessionState;
 
 public class DeleteCommand<T extends DBRecord> implements Command {
     private final T record;

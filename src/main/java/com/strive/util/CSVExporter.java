@@ -1,4 +1,4 @@
-package com.strive.bll;
+package com.strive.util;
 
 import com.strive.model.SpendingLimit;
 import com.strive.model.Transaction;

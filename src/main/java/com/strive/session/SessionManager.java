@@ -1,6 +1,12 @@
 package com.strive.session;
 
 import com.strive.model.*;
+import com.strive.model.dao.LimitDAO;
+import com.strive.model.dao.TransactionDAO;
+import com.strive.session.command.AddCommand;
+import com.strive.session.command.Command;
+import com.strive.session.command.DeleteCommand;
+import com.strive.session.command.EditCommand;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -152,8 +158,8 @@ public class SessionManager {
 
     private void persistCommand(Command cmd) {
         switch (cmd) {
-            case AddCommand<?>    c -> persistInsert(c.getRecord());
-            case EditCommand<?>   c -> persistUpdate(c.getUpdated());  // ← update, not insert
+            case AddCommand<?> c -> persistInsert(c.getRecord());
+            case EditCommand<?> c -> persistUpdate(c.getUpdated());  // ← update, not insert
             case DeleteCommand<?> c -> persistDelete(c.getRecord());
             default -> System.err.println("[SessionManager] Unknown command: "
                     + cmd.getClass().getSimpleName());

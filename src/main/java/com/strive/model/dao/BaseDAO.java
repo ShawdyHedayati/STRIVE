@@ -1,4 +1,4 @@
-package com.strive.model;
+package com.strive.model.dao;
 
 import java.sql.*;
 import java.time.LocalDate;

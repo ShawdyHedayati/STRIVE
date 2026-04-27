@@ -1,9 +1,8 @@
-package com.strive.model;
+package com.strive.model.dao;
 
-import java.sql.*;
-import java.time.LocalDate;
+import com.strive.model.Transaction;
+
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 /**

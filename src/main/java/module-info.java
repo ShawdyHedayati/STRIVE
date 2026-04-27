@@ -14,4 +14,9 @@ module com.strive {
     exports com.strive.session;
     exports com.strive.bll;
     exports com.strive.model;
+    exports com.strive.model.dao;
+    opens com.strive.model.dao to javafx.base, javafx.fxml;
+    exports com.strive.session.command;
+    opens com.strive.session.command to javafx.base;
+    exports com.strive.util;
 }
