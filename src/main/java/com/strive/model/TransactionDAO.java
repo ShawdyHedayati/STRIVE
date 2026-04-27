@@ -29,31 +29,13 @@ public class TransactionDAO extends BaseDAO {
      */
     public TransactionDAO(String dbUrl) { super(dbUrl); }
 
-    /**
-     * Fatches all transaction rows from the db and maps them to {@link Transaction} records
-     *
-     * @return list of all transactions, or an empty list if the table is empty
-     */
     public ArrayList<Transaction> fetchAll() {
-        String query = "SELECT * FROM transactions";
-        ArrayList<Transaction> results = new ArrayList<>();
-
-        try (Connection conn = DriverManager.getConnection(dbUrl);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
-            while (rs.next()) {
-                results.add(new Transaction(
-                        rs.getInt("id"),
-                        rs.getDouble("amount"),
-                        rs.getString("category"),
-                        // parse through stored date string back to LocalDate
-                        parseDate(rs.getString("date"))
-                ));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return results;
+        return executeQuery("SELECT * FROM transactions", rs -> new Transaction(
+                rs.getInt("id"),
+                rs.getDouble("amount"),
+                rs.getString("category"),
+                parseDate(rs.getString("date"))
+        ));
     }
 
     /**
@@ -78,19 +60,6 @@ public class TransactionDAO extends BaseDAO {
                 "UPDATE transactions SET amount=%f, category='%s', date='%s' WHERE id=%d",
                 t.amount(), t.category(), t.date(), t.id());
         executeWrite(sql);
-    }
-
-    /**
-     * Tries ISO format first (yyyy-MM-dd), falls back to legacy MM-dd-yyyy
-     * This handles existing DB data while all new writes use ISO going
-     * forward
-     */
-    private static LocalDate parseDate(String raw) {
-        try {
-            return LocalDate.parse(raw, ISO);
-        } catch (DateTimeParseException e) {
-            return LocalDate.parse(raw, LEGACY);
-        }
     }
 
     /**

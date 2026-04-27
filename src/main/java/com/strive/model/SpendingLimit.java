@@ -14,9 +14,4 @@ import java.time.LocalDate;
  */
 
 public record SpendingLimit(int id, double amount, String category, LocalDate createdAt) implements DBRecord {
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int getID() { return this.id; }
 }

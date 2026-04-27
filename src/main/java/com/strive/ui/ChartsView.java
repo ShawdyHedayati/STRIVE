@@ -65,7 +65,7 @@ public class ChartsView extends BaseView {
         navigationController  = AppContext.getNavigationController();
 
         // register as session listener
-        transactionController.getSession().addListener(this);
+        transactionController.addListener(this);
 
         // issue with jfx -> debug through claude to come to this solution
         allTransactionsTable.setColumnResizePolicy(

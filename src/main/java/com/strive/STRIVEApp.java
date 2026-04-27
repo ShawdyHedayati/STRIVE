@@ -1,5 +1,9 @@
 package com.strive;
 
+import com.strive.bll.CSVExporter;
+import com.strive.bll.ChartCalculator;
+import com.strive.bll.LimitCalculator;
+import com.strive.bll.SpendingCalculator;
 import com.strive.controller.LimitController;
 import com.strive.controller.NavigationController;
 import com.strive.controller.TransactionController;
@@ -56,12 +60,21 @@ public class STRIVEApp extends Application {
 		SessionManager session = new SessionManager(transactionDAO, limitDAO);
 
 		// CONTROLLER LAYER - ea controller shares same sesh
-		TransactionController tc = new TransactionController(session);
+		SpendingCalculator spendingCalculator = new SpendingCalculator();
+		LimitCalculator limitCalculator = new LimitCalculator();
+		ChartCalculator chartCalculator= new ChartCalculator();
+		CSVExporter csvExporter = new CSVExporter();
+
+		TransactionController tc = new TransactionController(
+				session, spendingCalculator, limitCalculator, chartCalculator, csvExporter
+		);
+
 		LimitController lc = new LimitController(session);
 		NavigationController nc = new NavigationController(session);
 
 		// wipe lim from prev weeks
 		lc.checkAndApplyWeeklyReset();
+		nc.requestSave();
 
 		// BRIDGE
 		AppContext.init(tc, lc, nc);

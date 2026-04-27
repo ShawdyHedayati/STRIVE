@@ -7,7 +7,7 @@ public class DeleteCommand<T extends DBRecord> implements Command {
 
     public DeleteCommand(T record) { this.record = record; }
 
-    @Override public void apply(SessionState state) { state.remove(record.getID()); }
+    @Override public void apply(SessionState state) { state.remove(record.id()); }
     @Override public void undo(SessionState state)  { state.add(record); }
 
     public T getRecord() { return record; }

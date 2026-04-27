@@ -52,12 +52,12 @@ public class SessionState {
     }
 
     public void remove(int id) {
-        transactions.removeIf(t -> t.getID() == id);
-        limits.removeIf(l -> l.getID() == id);
+        transactions.removeIf(t -> t.id() == id);
+        limits.removeIf(l -> l.id() == id);
     }
 
     public void update(DBRecord record) {
-        remove(record.getID());
+        remove(record.id());
         add(record);
     }
 

@@ -15,6 +15,8 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Handles all user actions related to transactions: add, edit, delete, undo, export, and supply display data to UI
@@ -34,18 +36,26 @@ public class TransactionController {
     private final LimitCalculator limitCalculator;
     private final ChartCalculator chartCalculator;
     private final CSVExporter csvExporter;
+    private final Set<Integer> preloadedTransactionIds;
 
     /**
      * Constructs a TransactionController with its required bll dependencies
      *
      * @param session the session manager shared across all controllers
      */
-    public TransactionController(SessionManager session) {
+    public TransactionController(SessionManager session,
+                                 SpendingCalculator spendingCalculator,
+                                 LimitCalculator limitCalculator,
+                                 ChartCalculator chartCalculator,
+                                 CSVExporter csvExporter) {
         this.session = session;
-        this.spendingCalculator = new SpendingCalculator();
-        this.limitCalculator = new LimitCalculator();
-        this.chartCalculator = new ChartCalculator();
-        this.csvExporter = new CSVExporter();
+        this.spendingCalculator = spendingCalculator;
+        this.limitCalculator = limitCalculator;
+        this.chartCalculator = chartCalculator;
+        this.csvExporter = csvExporter;
+        this.preloadedTransactionIds = session.getTransactions().stream()
+                .map(Transaction::id)
+                .collect(Collectors.toSet());
     }
 
     /**
@@ -128,6 +138,8 @@ public class TransactionController {
      */
     public void undo() { session.undo(); }
 
+    public boolean canUndo() { return session.canUndo(); }
+
     /**
      * Generates a CSV report and writes it to the given file path.
      * The bll {@link CSVExporter} produces the formatted string;
@@ -167,23 +179,15 @@ public class TransactionController {
         return limitCalculator.limitBarData(session.getLimits(), session.getTransactions());
     }
 
-    /**
-     * Returns all transactions entered today, for display in the Today's
-     * Entries island on dahs
-     *
-     * @return list of today's transaction
-     */
     public List<Transaction> getSessionTransactions() {
-        java.util.Set<Integer> preloaded = session.getPreloadedTransactionIds();
-        return session.getTransactions().stream().filter(t -> !preloaded.contains(t.id())).toList();
+        return session.getTransactions().stream()
+                .filter(t -> !preloadedTransactionIds.contains(t.id()))
+                .toList();
     }
 
-    /**
-     * Expose SessionManager so UI controllers can reg themselves as {@link com.strive.session.SessionListener}s
-     *
-     * @return the shared session manager
-     */
-    public com.strive.session.SessionManager getSession() { return session; }
+    public void addListener(SessionListener listener) {
+        session.addListener(listener);
+    }
 
     /**
      * Returns the full transaction list from the session, used by the All

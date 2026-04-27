@@ -91,7 +91,6 @@ public class DashboardView extends BaseView {
 
         // reg as sesh listener so refresh() fires on every state change
         AppContext.getTransactionController()
-                .getSession()
                 .addListener(this);
 
         // populate cat dropdown from CategoryRegistry (single source)
@@ -195,7 +194,7 @@ public class DashboardView extends BaseView {
     private void syncUndoButton() {
         if (undoBtn == null) return;
         undoBtn.setDisable(
-                !AppContext.getTransactionController().getSession().canUndo());
+                !AppContext.getTransactionController().canUndo());
     }
 
     @FXML

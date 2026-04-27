@@ -107,17 +107,10 @@ public class LimitController {
         System.out.println("[LimitController] Deleted limit id=" + id);
     }
 
-    /**
-     * Performs the weekly reset by deleting all current spending limits
-     * and flushing immediately to the db
-     * Called at the beginning of ea week per the spec
-     */
     public void weeklyReset() {
-        // copy the list first to avoid ConcurrentModificationException while iter
         List<SpendingLimit> all = List.copyOf(session.getLimits());
         all.forEach(l -> session.apply(new DeleteCommand<>(l)));
-        // flush immediately; the reset if not part of the normal save workflow
-        session.flush();
+        // flush removed — caller is responsible for persisting
         System.out.println("[LimitController] Weekly reset complete.");
     }
 

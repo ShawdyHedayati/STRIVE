@@ -15,9 +15,5 @@ import java.time.LocalDate;
 
 public record Transaction(int id, double amount, String category, LocalDate date) implements DBRecord {
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int getID() { return this.id; }
 }
+

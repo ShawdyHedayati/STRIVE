@@ -8,5 +8,5 @@ package com.strive.model;
 
 public interface DBRecord {
     // returns the unique primary key for this record
-    int getID();
+    int id();
 }
