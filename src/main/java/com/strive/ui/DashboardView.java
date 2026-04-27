@@ -19,6 +19,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.Popup;
 
 import java.io.IOException;
 import java.net.URL;
@@ -485,12 +486,27 @@ public class DashboardView extends BaseView {
         });
 
         Platform.runLater(() -> {
+            Popup piePopup = new Popup();
+            Label pieLabel = new Label();
+            pieLabel.getStyleClass().add("chart-hover-label");
+            piePopup.getContent().add(pieLabel);
+
             int i = 0;
             for (PieChart.Data d : spendingPieChart.getData()) {
                 if (i >= slices.size()) break;
-                String color = CategoryRegistry.colorFor(slices.get(i).category());
+                SpendingCalculator.PieSlice slice = slices.get(i);
+                String color = CategoryRegistry.colorFor(slice.category());
                 if (d.getNode() != null) {
                     d.getNode().setStyle("-fx-pie-color: " + color + ";");
+
+                    // cursor follow hover
+                    d.getNode().setOnMouseMoved(e -> {
+                        pieLabel.setText(String.format("%s: $%.2f (%.0f%%)",
+                                slice.category(), slice.amount(), slice.percent()));
+                        piePopup.show(STRIVEApp.getPrimaryStage(),
+                                e.getScreenX() + 14, e.getScreenY() + 14);
+                    });
+                    d.getNode().setOnMouseExited(e -> piePopup.hide());
                 }
                 i++;
             }
