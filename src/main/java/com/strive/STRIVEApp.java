@@ -12,6 +12,8 @@ import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -79,6 +81,7 @@ public class STRIVEApp extends Application {
 				alert.initStyle(StageStyle.UNDECORATED);
 				alert.setOnShown(ev -> {
 					Stage s = (Stage) alert.getDialogPane().getScene().getWindow();
+					alert.getDialogPane().getScene().setFill(Color.TRANSPARENT);
 					s.setOnCloseRequest(Event::consume);
 				});
 				alert.setTitle("Unsaved Changes");
