@@ -68,7 +68,6 @@ public class SpendingCalculator {
      * @param category the spending category
      * @param amount total amount spent in this category this week
      * @param percent percentage of total weekly spending (0-100, 2 dec places)
-     * @param color hex color from {@link CategoryRegistry}
      */
     public record PieSlice(String category, double amount, double percent) {}
 }
