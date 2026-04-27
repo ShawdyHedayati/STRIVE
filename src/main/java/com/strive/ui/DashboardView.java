@@ -225,6 +225,10 @@ public class DashboardView extends BaseView {
 
         DatePicker dp = new DatePicker(selected.date());
 
+        Label errorLabel = new Label();
+        errorLabel.getStyleClass().add("error-label");
+        errorLabel.setVisible(false);
+
         VBox content = new VBox(8,
                 new Label("Category:"), catCombo,
                 new Label("Amount:"),   amtField,
@@ -234,21 +238,29 @@ public class DashboardView extends BaseView {
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         applyStyles(dialog.getDialogPane());
 
+        Button okBtn = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+        okBtn.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+            try {
+                double amt = Double.parseDouble(amtField.getText().trim());
+                if (amt <= 0) throw new NumberFormatException();
+                errorLabel.setVisible(false);
+            } catch (NumberFormatException e) {
+                errorLabel.setText("Please enter a valid amount greater than 0.");
+                errorLabel.setVisible(true);
+                event.consume();
+            }
+        });
+
         Optional<ButtonType> result = dialog.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            try {
-                double newAmount = Double.parseDouble(amtField.getText().trim());
-                animatePieOnNextRefresh = true;
-
-                transactionController.editTransaction(
-                        selected.id(),
-                        newAmount,
-                        catCombo.getValue(),
-                        dp.getValue());
-                // refresh() fires automatically via onSessionUpdated()
-            } catch (NumberFormatException e) {
-                showError("Invalid Amount", "Please enter a valid number.");
-            }
+            double newAmount = Double.parseDouble(amtField.getText().trim());
+            animatePieOnNextRefresh = true;
+            transactionController.editTransaction(
+                    selected.id(),
+                    newAmount,
+                    catCombo.getValue(),
+                    dp.getValue());
+            // refresh() fires automatically via onSessionUpdated()
         }
     }
 
@@ -306,23 +318,28 @@ public class DashboardView extends BaseView {
         Button okBtn = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
         okBtn.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
             String cat = catCombo.getValue();
-            if (limitController.categoryLimitExists(cat)) {
+            String amtText = amtField.getText().trim();
+            double amt = -1;
+            try { amt = Double.parseDouble(amtText); } catch (NumberFormatException ignored) {}
+
+            if (amt <= 0) {
+                errorLabel.setText("Please enter a valid amount greater than 0.");
+                errorLabel.setVisible(true);
+                event.consume();
+            } else if (limitController.categoryLimitExists(cat)) {
                 errorLabel.setText("A limit for " + cat +
                         " already exists, please select that limit to edit.");
                 errorLabel.setVisible(true);
-                event.consume(); // keep dialog open
+                event.consume();
+            } else {
+                errorLabel.setVisible(false);
             }
         });
 
         dialog.showAndWait().ifPresent(result -> {
             if (result == ButtonType.OK) {
-                try {
-                    double amt = Double.parseDouble(amtField.getText().trim());
-                    limitController.addLimit(catCombo.getValue(), amt);
-                    // refresh() fires automatically via onSessionUpdated()
-                } catch (NumberFormatException e) {
-                    showError("Invalid Amount", "Please enter a valid number.");
-                }
+                double amt = Double.parseDouble(amtField.getText().trim());
+                limitController.addLimit(catCombo.getValue(), amt);
             }
         });
     }
@@ -361,24 +378,29 @@ public class DashboardView extends BaseView {
         Button okBtn = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
         okBtn.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
             String newCat = catCombo.getValue();
-            if (!newCat.equalsIgnoreCase(limit.category())
+            double amt = -1;
+            try { amt = Double.parseDouble(amtField.getText().trim()); } catch (NumberFormatException ignored) {}
+
+            if (amt <= 0) {
+                errorLabel.setText("Please enter a valid amount greater than 0.");
+                errorLabel.setVisible(true);
+                event.consume();
+            } else if (!newCat.equalsIgnoreCase(limit.category())
                     && limitController.categoryLimitExists(newCat)) {
                 errorLabel.setText("A limit for " + newCat +
                         " already exists, please select that limit to edit.");
                 errorLabel.setVisible(true);
                 event.consume();
+            } else {
+                errorLabel.setVisible(false);
             }
         });
 
         dialog.showAndWait().ifPresent(result -> {
             if (result == ButtonType.OK) {
-                try {
-                    double amt = Double.parseDouble(amtField.getText().trim());
-                    limitController.editLimit(limit.id(), catCombo.getValue(), amt);
-                    // refresh() fires automatically via onSessionUpdated()
-                } catch (NumberFormatException e) {
-                    showError("Invalid Amount", "Please enter a valid number.");
-                }
+                double amt = Double.parseDouble(amtField.getText().trim());
+                limitController.editLimit(limit.id(), catCombo.getValue(), amt);
+                // refresh() fires automatically via onSessionUpdated()
             }
         });
     }

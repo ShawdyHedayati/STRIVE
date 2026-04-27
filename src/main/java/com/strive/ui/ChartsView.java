@@ -137,25 +137,39 @@ public class ChartsView extends BaseView {
         TextField amtField = new TextField(String.valueOf(selected.amount()));
         javafx.scene.control.DatePicker dp = new javafx.scene.control.DatePicker(selected.date());
 
+        Label errorLabel = new Label();
+        errorLabel.getStyleClass().add("error-label");
+        errorLabel.setVisible(false);
+
         VBox content = new VBox(8,
                 new Label("Category:"), catCombo,
                 new Label("Amount:"),   amtField,
-                new Label("Date:"),     dp);
+                new Label("Date:"),     dp,
+                errorLabel);
         content.getStyleClass().add("dialog-content");
         dialog.getDialogPane().setContent(content);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         applyStyles(dialog.getDialogPane());
 
+        Button okBtn = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+        okBtn.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+            try {
+                double amt = Double.parseDouble(amtField.getText().trim());
+                if (amt <= 0) throw new NumberFormatException();
+                errorLabel.setVisible(false);
+            } catch (NumberFormatException e) {
+                errorLabel.setText("Please enter a valid amount greater than 0.");
+                errorLabel.setVisible(true);
+                event.consume();
+            }
+        });
+
         Optional<ButtonType> result = dialog.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            try {
-                double newAmount = Double.parseDouble(amtField.getText().trim());
-                transactionController.editTransaction(
-                        selected.id(), newAmount, catCombo.getValue(), dp.getValue());
-                // refresh() fires automatically via onSessionUpdated()
-            } catch (NumberFormatException e) {
-                showError("Invalid Amount", "Please enter a valid number.");
-            }
+            double newAmount = Double.parseDouble(amtField.getText().trim());
+            transactionController.editTransaction(
+                    selected.id(), newAmount, catCombo.getValue(), dp.getValue());
+            // refresh() fires automatically via onSessionUpdated()
         }
     }
 
