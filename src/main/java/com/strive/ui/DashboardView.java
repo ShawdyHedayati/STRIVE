@@ -213,6 +213,7 @@ public class DashboardView extends BaseView {
         if (selected == null) return;
 
         Dialog<ButtonType> dialog = new Dialog<>();
+        initDialog(dialog);
         dialog.setTitle("Edit Transaction");
         dialog.setHeaderText("Update transaction details");
 
@@ -257,6 +258,7 @@ public class DashboardView extends BaseView {
         if (selected == null) return;
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        initDialog(confirm);
         confirm.setTitle("Delete Transaction");
         confirm.setHeaderText("Are you sure?");
         confirm.setContentText("This transaction will be removed.");
@@ -276,6 +278,7 @@ public class DashboardView extends BaseView {
     @FXML
     private void handleAddLimit() {
         Dialog<ButtonType> dialog = new Dialog<>();
+        initDialog(dialog);
         dialog.setTitle("Add Spending Limit");
         dialog.setHeaderText("Set a weekly spending limit for a category");
 
@@ -331,6 +334,7 @@ public class DashboardView extends BaseView {
      */
     public void handleEditLimit(SpendingLimit limit) {
         Dialog<ButtonType> dialog = new Dialog<>();
+        initDialog(dialog);
         dialog.setTitle("Edit Spending Limit");
         dialog.setHeaderText("Update limit for " + limit.category());
 
@@ -386,6 +390,7 @@ public class DashboardView extends BaseView {
      */
     public void handleDeleteLimit(SpendingLimit limit) {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        initDialog(confirm);
         confirm.setTitle("Delete Limit");
         confirm.setHeaderText("Delete spending limit for " + limit.category() + "?");
         confirm.setContentText("This action cannot be undone.");

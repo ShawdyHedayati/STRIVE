@@ -11,6 +11,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -71,6 +72,8 @@ public class STRIVEApp extends Application {
 			if (nc.hasUnsavedChanges()) {
 				javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
 						javafx.scene.control.Alert.AlertType.CONFIRMATION);
+				alert.initOwner(primaryStage);
+				alert.initModality(Modality.WINDOW_MODAL);
 				alert.setTitle("Unsaved Changes");
 				alert.setHeaderText("You have unsaved changes.");
 				alert.setContentText(

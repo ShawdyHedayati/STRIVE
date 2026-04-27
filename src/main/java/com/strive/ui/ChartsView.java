@@ -125,6 +125,7 @@ public class ChartsView extends BaseView {
         if (selected == null) return;
 
         Dialog<ButtonType> dialog = new Dialog<>();
+        initDialog(dialog);
         dialog.setTitle("Edit Transaction");
         dialog.setHeaderText("Update transaction details");
 
@@ -164,6 +165,7 @@ public class ChartsView extends BaseView {
         if (selected == null) return;
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        initDialog(confirm);
         confirm.setTitle("Delete Transaction");
         confirm.setHeaderText("Are you sure?");
         confirm.setContentText("This transaction will be permanently removed.");
