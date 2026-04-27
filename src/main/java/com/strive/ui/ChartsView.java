@@ -15,6 +15,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Popup;
 
 import java.io.File;
 import java.io.IOException;
@@ -276,6 +277,34 @@ public class ChartsView extends BaseView {
                 currentSeries.getNode().setStyle("-fx-stroke: #3B82F6;"); // blue
             if (avgSeries.getNode() != null)
                 avgSeries.getNode().setStyle("-fx-stroke: #9CA3AF;");     // grey
+
+            Popup linePopup = new Popup();
+            Label lineLabel = new Label();
+            lineLabel.getStyleClass().add("chart-hover-label");
+            linePopup.getContent().add(lineLabel);
+
+            for (XYChart.Data<String, Number> point : currentSeries.getData()) {
+                if (point.getNode() != null) {
+                    point.getNode().setOnMouseMoved(e -> {
+                        lineLabel.setText(String.format("Current Week — %s: $%.2f",
+                                point.getXValue(), point.getYValue().doubleValue()));
+                        linePopup.show(STRIVEApp.getPrimaryStage(),
+                                e.getScreenX() + 14, e.getScreenY() + 14);
+                    });
+                    point.getNode().setOnMouseExited(e -> linePopup.hide());
+                }
+            }
+            for (XYChart.Data<String, Number> point : avgSeries.getData()) {
+                if (point.getNode() != null) {
+                    point.getNode().setOnMouseMoved(e -> {
+                        lineLabel.setText(String.format("Total Average — %s: $%.2f",
+                                point.getXValue(), point.getYValue().doubleValue()));
+                        linePopup.show(STRIVEApp.getPrimaryStage(),
+                                e.getScreenX() + 14, e.getScreenY() + 14);
+                    });
+                    point.getNode().setOnMouseExited(e -> linePopup.hide());
+                }
+            }
         });
     }
 
@@ -292,16 +321,27 @@ public class ChartsView extends BaseView {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Average Spending");
 
+        Popup barPopup = new Popup();
+        Label barLabel = new Label();
+        barLabel.getStyleClass().add("chart-hover-label");
+        barPopup.getContent().add(barLabel);
+
         avgData.forEach((cat, avg) -> {
             if (avg > 0) {
                 String color = com.strive.model.CategoryRegistry.colorFor(cat);
                 XYChart.Data<String, Number> bar = new XYChart.Data<>(cat, avg);
                 series.getData().add(bar);
 
-                // color the bar after it's rendered
                 Platform.runLater(() -> {
-                    if (bar.getNode() != null)
+                    if (bar.getNode() != null) {
                         bar.getNode().setStyle("-fx-bar-fill: " + color + ";");
+                        bar.getNode().setOnMouseMoved(e -> {
+                            barLabel.setText(String.format("%s: $%.2f avg", cat, avg));
+                            barPopup.show(STRIVEApp.getPrimaryStage(),
+                                    e.getScreenX() + 14, e.getScreenY() + 14);
+                        });
+                        bar.getNode().setOnMouseExited(e -> barPopup.hide());
+                    }
                 });
             }
         });
