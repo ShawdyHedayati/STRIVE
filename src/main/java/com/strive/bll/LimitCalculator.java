@@ -61,7 +61,7 @@ public class LimitCalculator {
      * @return true if over limit
      */
     public boolean isOverLimit(SpendingLimit limit, List<Transaction> transactions) {
-        return spentForCategory(limit.category(), transactions) > limit.amount();
+        return spentForCategory(limit.category(), transactions) >= limit.amount();
     }
 
     /**

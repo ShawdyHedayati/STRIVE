@@ -557,7 +557,12 @@ public class DashboardView extends BaseView {
                     .mapToDouble(LimitCalculator.LimitBarData::spent)
                     .findFirst().orElse(0.0);
             double remaining = limit.amount() - spent;
-            if (remaining >= 0) {
+            if (remaining == 0) {
+                txLimitStatusLabel.setText("Limit reached");
+                if(!txLimitStatusLabel.getStyleClass().contains("label-over-limit")) {
+                    txLimitStatusLabel.getStyleClass().add("label-over-limit");
+                }
+            } else if (remaining > 0) {
                 txLimitStatusLabel.setText(String.format("Limit: $%.2f remaining", remaining));
                 txLimitStatusLabel.getStyleClass().removeAll("label-over-limit");
             } else {
@@ -592,7 +597,10 @@ public class DashboardView extends BaseView {
         catLabel.getStyleClass().add("limit-category-label");
 
         // amount remaining or over
-        Label amtLabel = new Label(isOver
+        Label amtLabel = new Label(
+                bar.spent() == bar.limitAmount()
+                ? "Limit reached"
+                : isOver
                 ? String.format("-$%.2f over limit", bar.spent() - bar.limitAmount())
                 : String.format("$%.2f remaining", bar.limitAmount() - bar.spent()));
         amtLabel.getStyleClass().add(isOver ? "label-over-limit" : "label-under-limit");
