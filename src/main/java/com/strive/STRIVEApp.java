@@ -14,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.IOException;
@@ -75,6 +76,7 @@ public class STRIVEApp extends Application {
 						javafx.scene.control.Alert.AlertType.CONFIRMATION);
 				alert.initOwner(primaryStage);
 				alert.initModality(Modality.WINDOW_MODAL);
+				alert.initStyle(StageStyle.UNDECORATED);
 				alert.setOnShown(ev -> {
 					Stage s = (Stage) alert.getDialogPane().getScene().getWindow();
 					s.setOnCloseRequest(Event::consume);
