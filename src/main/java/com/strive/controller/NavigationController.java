@@ -14,13 +14,7 @@ import com.strive.session.SessionManager;
  */
 
 public class NavigationController {
-    // represents the two top level views the user can nav between
-    public enum View { DASHBOARD, CHARTS }
-
     private final SessionManager session;
-
-    // tracks which view is currently active; defaults to dash on startup
-    private View currentView = View.DASHBOARD;
 
     /**
      * Contructs a NavigationController nacked by the shared session manager
@@ -30,18 +24,10 @@ public class NavigationController {
     public NavigationController(SessionManager session) { this.session = session; }
 
     /**
-     * Returns the currently active view
-     *
-     * @return the current view
-     */
-    public View getCurrentView() { return currentView; }
-
-    /**
      * Switches the active view to the Dash
      * The UI layer is responsible for showing/hiding the appropriate panels
      */
     public void goToDashboard() {
-        currentView = View.DASHBOARD;
         System.out.println("[NavigationController] Navigated to Dashboard.");
     }
 
@@ -50,7 +36,6 @@ public class NavigationController {
      * The UI layer is responsible for showing/hiding the appropriate panels
      */
     public void goToCharts() {
-        currentView = View.CHARTS;
         System.out.println("[NavigationController] Navigated to Charts.");
     }
 

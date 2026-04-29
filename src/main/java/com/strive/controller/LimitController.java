@@ -6,6 +6,7 @@ import com.strive.session.*;
 import com.strive.session.command.AddCommand;
 import com.strive.session.command.DeleteCommand;
 import com.strive.session.command.EditCommand;
+import com.strive.util.DateUtils;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -153,8 +154,7 @@ public class LimitController {
      */
     public void checkAndApplyWeeklyReset() {
         // calc mon of current week as reset bound
-        LocalDate today = LocalDate.now();
-        LocalDate startOfWeek = today.minusDays(today.getDayOfWeek().getValue() - 1);
+        LocalDate startOfWeek = DateUtils.startOfCurrentWeek();
 
         boolean resetNeeded = session.getLimits().stream()
                 .anyMatch(l -> l.createdAt().isBefore(startOfWeek));

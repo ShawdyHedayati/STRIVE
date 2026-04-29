@@ -102,5 +102,5 @@ public class ChartCalculator {
      * @param value the value to round
      * @return value rounded to 2 dec placed
      */
-    public double roundTo2(double value) { return Math.round(value * 100.0) / 100.0; }
+    private double roundTo2(double value) { return Math.round(value * 100.0) / 100.0; }
 }

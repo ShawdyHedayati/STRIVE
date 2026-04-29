@@ -2,7 +2,6 @@ package com.strive.model.dao;
 
 import com.strive.model.Transaction;
 
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 /**
@@ -16,11 +15,6 @@ import java.util.ArrayList;
  */
 
 public class TransactionDAO extends BaseDAO {
-    // all new writes use ISO format
-    //private static final DateTimeFormatter ISO = DateTimeFormatter.ISO_LOCAL_DATE;
-    // handles existing db data stored in MM-dd-yyyy
-    //private static final DateTimeFormatter LEGACY = DateTimeFormatter.ofPattern("MM-dd-yyyy");
-
     /**
      * Creates a new TransactionDAO connected to the given SQLite db URL
      *

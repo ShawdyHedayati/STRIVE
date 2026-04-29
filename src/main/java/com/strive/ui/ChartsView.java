@@ -3,7 +3,6 @@ package com.strive.ui;
 import com.strive.controller.NavigationController;
 import com.strive.controller.TransactionController;
 import com.strive.model.Transaction;
-import com.strive.session.SessionListener;
 import com.strive.AppContext;
 import com.strive.STRIVEApp;
 

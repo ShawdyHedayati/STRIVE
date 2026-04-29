@@ -90,8 +90,7 @@ public class DashboardView extends BaseView {
                 TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 
         // reg as sesh listener so refresh() fires on every state change
-        AppContext.getTransactionController()
-                .addListener(this);
+        transactionController.addListener(this);
 
         // populate cat dropdown from CategoryRegistry (single source)
         CategoryRegistry.getAll().forEach(c ->
@@ -232,7 +231,8 @@ public class DashboardView extends BaseView {
         VBox content = new VBox(8,
                 new Label("Category:"), catCombo,
                 new Label("Amount:"),   amtField,
-                new Label("Date:"),     dp);
+                new Label("Date:"),     dp,
+                errorLabel);
         content.getStyleClass().add("dialog-content");
         dialog.getDialogPane().setContent(content);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
