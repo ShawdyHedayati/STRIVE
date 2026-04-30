@@ -10,16 +10,16 @@ import java.util.stream.Collectors;
 
 /**
  * Business logic for all spending aggregation and chart data used
- * by the dashboard's pie chart and the charts view's trend line
+ * by the dashboard's pie chart.
  *
- * All methods are stateless so they take the current transaction list
+ * All methods are stateless, so they get the current transaction list
  * from the session layer and return derived values.
- * Nothing is persisted here
+ * Nothing is persisted here.
  */
 public class SpendingCalculator {
     /**
-     * Groups weekly transaction by category and sums their amounts
-     * Only transactions from the current week (Mon-Sun) are included
+     * Groups weekly transaction by category and sums their amounts.
+     * Only transactions from the current week (Mon-Sun) are included.
      *
      * @param transactions the full in memory transaction list
      * @return map of category name to total amount spent this week
@@ -36,9 +36,9 @@ public class SpendingCalculator {
     }
 
     /**
-     * Produces the data needed to render the weekly pie chart on the dash
-     * Each slice contain the category name, amount, percent of total, and color
-     * Returns an empty list if there are no transactions this week
+     * Produces the data needed to render the weekly pie chart on the dash.
+     * Each slice contains the category name, amount, and percent of total.
+     * Returns an empty list if there are no transactions this week.
      *
      * @param transactions the full in memory transaction list
      * @return list of pie slices, one per category with spending this week
