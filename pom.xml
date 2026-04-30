@@ -40,7 +40,18 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>com.cobra/com.strive.STRIVEApp</mainClass>
+                    <mainClass>com.strive.STRIVEApp</mainClass>
+					<launcher>strive</launcher>
+					<jlinkImageName>strive-image</jlinkImageName>
+					<jlinkZipName>strive-zip</jlinkZipName>
+					<jlinkModules>javafx.controls,javafx.fxml,java.sql,java.logging</jlinkModules>
+					<noHeaderFiles>true</noHeaderFiles>
+					<noManPages>true</noManPages>
+					<stripDebug>true</stripDebug>
+					<compress>2</compress>
+					<options>
+						<option>--bind-services</option>
+					</options>
                 </configuration>
             </plugin>
 			<plugin>
