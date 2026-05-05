@@ -53,7 +53,7 @@ public class LimitController {
 
         SpendingLimit limit = new SpendingLimit(
                 session.nextId(), amount, category, LocalDate.now());
-        session.apply(new AddCommand<>(limit));
+        session.applyPermanent(new AddCommand<>(limit));
         System.out.println("[LimitController] Added limit: " + limit);
     }
 
@@ -87,7 +87,7 @@ public class LimitController {
 
         // preserve the orgininal createdAt date; only category and amt change
         SpendingLimit updated = new SpendingLimit(id, newAmount, newCategory, previous.createdAt());
-        session.apply(new EditCommand<>(previous, updated));
+        session.applyPermanent(new EditCommand<>(previous, updated));
         System.out.println("[LimitController] Edited limit id=" + id);
     }
 
@@ -107,13 +107,13 @@ public class LimitController {
             return;
         }
 
-        session.apply(new DeleteCommand<>(target));
+        session.applyPermanent(new DeleteCommand<>(target));
         System.out.println("[LimitController] Deleted limit id=" + id);
     }
 
     public void weeklyReset() {
         List<SpendingLimit> all = List.copyOf(session.getLimits());
-        all.forEach(l -> session.apply(new DeleteCommand<>(l)));
+        all.forEach(l -> session.applyPermanent(new DeleteCommand<>(l)));
         // flush removed — caller is responsible for persisting
         System.out.println("[LimitController] Weekly reset complete.");
     }

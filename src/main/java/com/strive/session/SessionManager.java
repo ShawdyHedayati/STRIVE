@@ -42,6 +42,8 @@ public class SessionManager {
     // ordered log of all pending commands not yet written to the db
     private final ArrayDeque<Command> commandLog = new ArrayDeque<>();
 
+    private final ArrayDeque<Command> permanentLog = new ArrayDeque<>();
+
     // true whenever the command log contains commands not yet flushed to db
     private boolean dirty = false;
 
@@ -83,6 +85,13 @@ public class SessionManager {
         notifyListeners();
     }
 
+    public void applyPermanent(Command cmd) {
+        cmd.apply(state);
+        permanentLog.addLast(cmd);
+        dirty = true;
+        notifyListeners();
+    }
+
     public boolean canUndo() {
         return !commandLog.isEmpty();
     }
@@ -109,12 +118,16 @@ public class SessionManager {
      * This is the only point at which the db is written to
      */
     public void flush() {
+        for (Command cmd : permanentLog) {
+            persistCommand(cmd);
+        }
+        permanentLog.clear();
         for (Command cmd : commandLog) {
             persistCommand(cmd);
         }
         commandLog.clear();
         dirty = false;
-        System.out.println("[SessionManager] Flushed to datebase.");
+        System.out.println("[SessionManager] Flushed to database.");
     }
 
     /**
