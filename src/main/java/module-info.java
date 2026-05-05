@@ -19,4 +19,5 @@ module com.strive {
     exports com.strive.session.command;
     opens com.strive.session.command to javafx.base;
     exports com.strive.util;
+    opens com.strive.util to javafx.base, javafx.fxml;
 }

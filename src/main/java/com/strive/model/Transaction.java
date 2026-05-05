@@ -1,5 +1,7 @@
 package com.strive.model;
 
+import com.strive.util.CategoryRegistry;
+
 import java.time.LocalDate;
 
 /**

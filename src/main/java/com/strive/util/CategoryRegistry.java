@@ -1,4 +1,4 @@
-package com.strive.model;
+package com.strive.util;
 
 import java.util.Arrays;
 import java.util.List;

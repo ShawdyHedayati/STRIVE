@@ -1,6 +1,6 @@
 package com.strive.bll;
 
-import com.strive.model.CategoryRegistry;
+import com.strive.util.CategoryRegistry;
 import com.strive.model.Transaction;
 import com.strive.util.DateUtils;
 

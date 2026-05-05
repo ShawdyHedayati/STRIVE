@@ -6,6 +6,7 @@ import com.strive.model.Transaction;
 import com.strive.AppContext;
 import com.strive.STRIVEApp;
 
+import com.strive.util.CategoryRegistry;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
@@ -130,7 +131,7 @@ public class ChartsView extends BaseView {
         dialog.setHeaderText("Update transaction details");
 
         ComboBox<String> catCombo = new ComboBox<>();
-        com.strive.model.CategoryRegistry.getAll()
+        CategoryRegistry.getAll()
                 .forEach(c -> catCombo.getItems().add(c.displayName()));
         catCombo.setValue(selected.category());
 
@@ -327,7 +328,7 @@ public class ChartsView extends BaseView {
 
         avgData.forEach((cat, avg) -> {
             if (avg > 0) {
-                String color = com.strive.model.CategoryRegistry.colorFor(cat);
+                String color = CategoryRegistry.colorFor(cat);
                 XYChart.Data<String, Number> bar = new XYChart.Data<>(cat, avg);
                 series.getData().add(bar);
 

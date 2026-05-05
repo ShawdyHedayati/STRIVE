@@ -4,7 +4,7 @@ import com.strive.bll.LimitCalculator;
 import com.strive.bll.SpendingCalculator;
 import com.strive.controller.LimitController;
 import com.strive.controller.TransactionController;
-import com.strive.model.CategoryRegistry;
+import com.strive.util.CategoryRegistry;
 import com.strive.model.SpendingLimit;
 import com.strive.model.Transaction;
 import com.strive.session.SessionListener;
