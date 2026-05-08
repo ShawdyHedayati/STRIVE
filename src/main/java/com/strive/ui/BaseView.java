@@ -1,5 +1,6 @@
 package com.strive.ui;
 
+import com.strive.STRIVEApp;
 import com.strive.controller.NavigationController;
 import com.strive.session.SessionListener;
 
@@ -38,7 +39,7 @@ public abstract class BaseView implements Initializable, SessionListener {
     }
 
     protected void initDialog(javafx.scene.control.Dialog<?> d) {
-        d.initOwner(com.strive.STRIVEApp.getPrimaryStage());
+        d.initOwner(STRIVEApp.getPrimaryStage());
         d.initModality(Modality.WINDOW_MODAL);
         d.initStyle(StageStyle.UNDECORATED);
         d.setOnShown(e -> {

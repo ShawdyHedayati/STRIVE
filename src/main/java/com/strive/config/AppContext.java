@@ -1,4 +1,4 @@
-package com.strive;
+package com.strive.config;
 
 import com.strive.controller.LimitController;
 import com.strive.controller.NavigationController;

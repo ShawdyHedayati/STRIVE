@@ -8,7 +8,7 @@ import com.strive.util.CategoryRegistry;
 import com.strive.model.SpendingLimit;
 import com.strive.model.Transaction;
 import com.strive.session.SessionListener;
-import com.strive.AppContext;
+import com.strive.config.AppContext;
 import com.strive.STRIVEApp;
 
 import javafx.application.Platform;
