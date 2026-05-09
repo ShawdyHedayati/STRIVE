@@ -95,9 +95,24 @@ src/main/resources/
 
 ### Prerequisites
 
-- Java 21 or later
-- Maven 3.8 or later
-- JavaFX 21 (pulled automatically by Maven via the pom)
+**Java 21 or later**
+
+Check your version:
+```bash
+java -version
+```
+You should see `openjdk version "21.x.x"` or higher. If not, download JDK 21 from https://adoptium.net and re-run the check before continuing.
+
+**Maven 3.8 or later**
+
+Check your version:
+```bash
+mvn -version
+```
+You should see `Apache Maven 3.x.x`. If the command is not found, download Maven from https://maven.apache.org/download.cgi, unzip it, and add its `bin` folder to your system PATH.
+
+JavaFX is pulled in automatically by Maven -- you do not need to install it separately.
+
 
 ### Run from source
 
